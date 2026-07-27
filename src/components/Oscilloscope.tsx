@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useCopy } from '../content';
-import * as f from '../lib/format';
 import { BOUNDS, ceiling, gain, relativeTime } from '../lib/model';
 
 const W = 640;
@@ -62,6 +61,7 @@ export function Oscilloscope({
   review: number;
 }) {
   const copy = useCopy();
+  const f = copy.format;
   const [ref, shrink] = useShrink();
 
   const cap = ceiling(share);
@@ -290,6 +290,7 @@ export function Oscilloscope({
 /** Channel key, matching the traces above. */
 export function ScopeLegend({ share, speed, review }: { share: number; speed: number; review: number }) {
   const copy = useCopy();
+  const f = copy.format;
   const items = [
     { key: 'CH1', color: 'var(--color-phosphor)', label: copy.scope.ch1, value: f.times(gain(share, speed, review)) },
     { key: 'CH2', color: 'var(--color-trace-b)', label: copy.scope.ch2, value: f.times(1 / relativeTime(share, speed)) },

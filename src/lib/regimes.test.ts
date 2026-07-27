@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { duration } from './format';
+import { makeFormats } from './format';
 import { REGIMES, ROWS, distractionBudget, regime, threshold, type RowId } from './regimes';
 
+const { duration } = makeFormats('en');
 const standard = regime('standard');
 
 describe('the schedule', () => {

@@ -1,10 +1,12 @@
 import { Ask, Live } from '../components/Fields';
 import { Display } from '../components/Latex';
 import { Source, Tally } from '../components/Prose';
-import * as f from '../lib/format';
+import { makeFormats } from '../lib/format';
 import { cardById } from '../lib/foundations';
 import { BOUNDS, DEFAULTS, loadVerdict, ratchetVerdict, type Inputs } from '../lib/model';
 import type { ChannelKey, Copy, Step, WalkthroughValues } from './types';
+
+const f = makeFormats('en');
 
 
 
@@ -262,6 +264,7 @@ function steps(v: WalkthroughValues, set: (patch: Partial<Inputs>) => void): Ste
 }
 
 export const EN: Copy = {
+  format: f,
   chrome: {
     documentTitle: 'DUTY simulator — what AI actually buys you',
     kicker: 'DUTY simulator · an interactive',

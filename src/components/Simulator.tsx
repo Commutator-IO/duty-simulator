@@ -3,10 +3,9 @@ import { Display } from './Latex';
 import { Metrics, Note, SectionHead } from './Cards';
 import { Console, type Channel } from './Fields';
 import { useCopy } from '../content';
+import type { Formats } from '../lib/format';
 import type { Copy } from '../content/types';
-import * as f from '../lib/format';
 import { BOUNDS, DEFAULTS, SUSTAINABLE_LOAD, simulate, type Inputs } from '../lib/model';
-import { loadSentence, ratchetSentence } from '../lib/verdicts';
 
 /** The scale both load meters are drawn against, in hours. */
 const SCALE = 12;
@@ -20,7 +19,7 @@ const SEGMENTS = 24;
  * that runs long lights up amber on its own without any text having to say so —
  * which is the whole reason the threshold is drawn rather than merely stated.
  */
-function Meter({ who, hours }: { who: string; hours: number }) {
+function Meter({ who, hours, f }: { who: string; hours: number; f: Formats }) {
   const lit = Math.round((Math.min(hours, SCALE) / SCALE) * SEGMENTS);
   const safe = (SUSTAINABLE_LOAD / SCALE) * SEGMENTS;
 
@@ -60,6 +59,7 @@ function Meter({ who, hours }: { who: string; hours: number }) {
 /** The five settings, as channels on the desk. */
 function parameters(
   copy: Copy,
+  f: Formats,
   inputs: Inputs,
   onChange: (patch: Partial<Inputs>) => void,
 ): Channel[] {
@@ -110,6 +110,7 @@ function parameters(
 /** The one fader that decides who ends up with the saving. */
 function ratchetChannel(
   copy: Copy,
+  f: Formats,
   inputs: Inputs,
   onChange: (patch: Partial<Inputs>) => void,
 ): Channel[] {
@@ -134,6 +135,7 @@ export function Simulator({
 }) {
   const copy = useCopy();
   const c = copy.simulator;
+  const f = copy.format;
   const result = simulate(inputs);
 
   return (
@@ -141,7 +143,7 @@ export function Simulator({
       <section className="mt-11">
         <SectionHead {...c.stepOne} />
 
-        <Console channels={parameters(copy, inputs, onChange)} />
+        <Console channels={parameters(copy, f, inputs, onChange)} />
 
         <Metrics
           items={[
@@ -179,8 +181,8 @@ export function Simulator({
 
         <h3 className="kicker mt-11 mb-2">{c.metersKicker}</h3>
         <div>
-          <Meter who={c.meterWith} hours={inputs.hours} />
-          <Meter who={c.meterWithout} hours={result.hoursWithout} />
+          <Meter who={c.meterWith} hours={inputs.hours} f={f} />
+          <Meter who={c.meterWithout} hours={result.hoursWithout} f={f} />
           <div className="font-mono text-muted flex justify-between text-[11px]">
             <span>0</span>
             <span>6 h</span>
@@ -189,13 +191,13 @@ export function Simulator({
           <p className="caption mt-2.5 max-w-[62ch]">{c.metersCaption}</p>
         </div>
 
-        <Note className="mt-7">{loadSentence(result, inputs)}</Note>
+        <Note className="mt-7">{copy.verdicts.load(result, inputs)}</Note>
       </section>
 
       <section className="mt-14">
         <SectionHead {...c.stepTwo} />
 
-        <Console channels={ratchetChannel(copy, inputs, onChange)} />
+        <Console channels={ratchetChannel(copy, f, inputs, onChange)} />
 
         <Display name="ratchet" />
 
@@ -224,7 +226,7 @@ export function Simulator({
         />
 
         <Note tone="alert" className="mt-7">
-          {ratchetSentence(result, inputs)}
+          {copy.verdicts.ratchet(result, inputs)}
         </Note>
       </section>
 

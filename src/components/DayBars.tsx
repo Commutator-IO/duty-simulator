@@ -1,5 +1,4 @@
 import { useCopy } from '../content';
-import * as f from '../lib/format';
 import { simulate, type Inputs } from '../lib/model';
 
 /**
@@ -73,6 +72,7 @@ function Row({
 export function DayBars({ inputs }: { inputs: Inputs }) {
   const copy = useCopy();
   const d = copy.dayBars;
+  const f = copy.format;
   const r = simulate(inputs);
 
   // Everything is measured against the day the work would have taken without

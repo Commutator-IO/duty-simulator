@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Note, Path, SectionHead, SubHead } from './Cards';
 import { Segmented } from './Fields';
 import { useCopy } from '../content';
-import * as f from '../lib/format';
 import { breakEvenDensity, simulate, type Inputs } from '../lib/model';
 import {
   DEFAULT_REGIME,
@@ -27,6 +26,7 @@ import {
 export function MacosSettings({ inputs }: { inputs: Inputs }) {
   const copy = useCopy();
   const m = copy.macos;
+  const f = copy.format;
   const [key, setKey] = useState<RegimeKey>(DEFAULT_REGIME);
   const [onlyLimited, setOnlyLimited] = useState(false);
 

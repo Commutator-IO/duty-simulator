@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { Tab } from '../lib/url';
 import type { CardId } from '../lib/foundations';
 import type { Mechanism, RegimeKey, RowId } from '../lib/regimes';
+import type { Formats } from '../lib/format';
 import type { Inputs, Result } from '../lib/model';
 
 /**
@@ -49,6 +50,9 @@ export type WalkthroughValues = {
 };
 
 export type Copy = {
+  /** How this language writes a figure. Part of the language, not a detail. */
+  format: Formats;
+
   /** Page furniture. */
   chrome: {
     /** The browser tab, which has to follow the language too. */
