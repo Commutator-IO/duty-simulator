@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Safety net for static hosting: after a redeploy, a page still in cache
+      // can reference an asset whose name has changed (Vite renames bundles on
+      // every build), giving a blank page. We detect the load failure and
+      // reload once — a reload revalidates the HTML and picks up the right
+      // names.
+      (function () {
+        try {
+          addEventListener(
+            'error',
+            function (e) {
+              var el = e.target;
+              var url = el && (el.src || el.href);
+              if (url && /\/assets\//.test(url) && !sessionStorage.getItem('assetReload')) {
+                sessionStorage.setItem('assetReload', '1');
+                location.reload();
+              }
+            },
+            true,
+          );
+          addEventListener('load', function () {
+            sessionStorage.removeItem('assetReload');
+          });
+        } catch (_) {}
+      })();
+    </script>
+    <meta
+      name="description"
+      content="What AI at work actually buys you: time saved, cognitive load and the expectations that visible productivity raises are three different quantities. Amdahl's law with a review term, an essay, macOS settings, and the results underneath."
+    />
+    <title>DUTY simulator — what AI actually buys you</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DUTY simulator — what AI actually buys you" />
+    <meta
+      property="og:description"
+      content="The time you save, the fatigue you avoid, and what your employer ends up expecting are not the same quantity."
+    />
+    <meta property="og:url" content="https://duty.commutator.io/" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      An editorial stack, chosen for the register rather than for novelty.
+      Source Serif 4 stands in for the newspaper text face; Libre Franklin is
+      the open descendant of Franklin Gothic, which is what a paper of this kind
+      uses for kickers and furniture; JetBrains Mono is kept for the instrument
+      readouts, where digits have to be the same width.
+    -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Libre+Franklin:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,199 @@
+@import 'tailwindcss';
+
+/**
+ * The palette.
+ *
+ * Two families. The first is the page — newsprint and ink, brass for the
+ * accent, slate for a second series, one alert red. The second is the
+ * instrument: a board the page is printed on, and a phosphor screen that stays
+ * dark in both themes, because a real scope does not turn white in daylight.
+ *
+ * Names are semantic rather than hue-based, so the dark override below is a
+ * redefinition of the same tokens rather than a second set of utilities.
+ */
+@theme {
+  --color-paper: #fbfaf7;
+  --color-panel: #f2f0ea;
+  --color-ink: #14181d;
+  --color-muted: #59606a;
+  --color-rule: #d8d4cb;
+  --color-brass: #8a5a12;
+  --color-brass-soft: #e0d0ae;
+  --color-slate: #2f5471;
+  --color-slate-soft: #c9d5df;
+  --color-alert: #8f2f1f;
+
+  /* Board: the copper traces under everything. */
+  --color-copper: #8a5a12;
+
+  /* Screen: fixed in both themes. A CRT is a light source, not a surface. */
+  --color-crt: #0b1410;
+  --color-crt-edge: #1d2b24;
+  --color-graticule: #2f4a3e;
+  --color-phosphor: #58e08c;
+  --color-beam: #9bf0b8;
+  --color-trace-b: #5bc8e8;
+  --color-trace-c: #f0a93c;
+
+  /* Readout: the LCD strip behind every figure. */
+  --color-lcd: #101a16;
+  --color-lcd-ink: #6fe3a0;
+
+  /**
+   * An editorial stack. The text face is a serif, as it is in a newspaper,
+   * because that is what long prose is set in and this page is mostly prose.
+   * The sans is reserved for furniture — kickers, labels, captions — and the
+   * mono for the instrument, where digits must not shift width as they change.
+   */
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Libre Franklin', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/**
+ * Dark mode redefines the tokens rather than doubling every utility with a
+ * `dark:` variant. This block is unlayered, so it wins over the `@layer theme`
+ * definitions above without needing `!important`. The screen tokens are absent
+ * on purpose: the scope looks the same either way.
+ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #14171c;
+    --color-panel: #1e232a;
+    --color-ink: #eceae5;
+    --color-muted: #9aa2ad;
+    --color-rule: #333a43;
+    --color-brass: #d2a03f;
+    --color-brass-soft: #4a3a18;
+    --color-slate: #8fb0cb;
+    --color-slate-soft: #2a3a48;
+    --color-alert: #dd8069;
+    --color-copper: #d2a03f;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-paper text-ink font-serif antialiased;
+    font-size: 19px;
+    line-height: 1.58;
+  }
+
+  /* Figures that sit in a column have to line up. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    @apply outline-brass outline-2 outline-offset-2;
+  }
+
+  /* Formulas, rendered as MathML and drawn by the browser with its own maths
+     font. That difference from the text face is the point — a formula should
+     not read as running prose. */
+  math {
+    font-size: 1.05em;
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  /**
+   * The kicker: the small sans line above a headline that tells you what kind
+   * of thing you are about to read. Also does duty for instrument labels.
+   */
+  .kicker {
+    @apply font-sans text-brass text-[11.5px] font-semibold tracking-[0.14em] uppercase;
+  }
+
+  /** A caption, under a chart or a photograph. */
+  .caption {
+    @apply font-sans text-muted text-[13.5px] leading-relaxed;
+  }
+
+  /** The standfirst under a headline, set larger than the body. */
+  .dek {
+    @apply text-muted text-[21px] leading-[1.5] max-sm:text-[19px];
+  }
+
+  /**
+   * The screen. Dark in both themes, with a faint bloom at the edges the way a
+   * phosphor tube leaks light into its own bezel.
+   */
+  .crt {
+    background:
+      radial-gradient(120% 90% at 50% 40%, #12211b 0%, var(--color-crt) 70%),
+      var(--color-crt);
+    border: 1px solid var(--color-crt-edge);
+    box-shadow:
+      inset 0 0 40px rgb(0 0 0 / 0.75),
+      inset 0 0 3px rgb(88 224 140 / 0.16);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Horizontal raster, barely there. Purely decorative, so it is a
+     pseudo-element and never reaches assistive technology. */
+  .crt::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      rgb(0 0 0 / 0.22) 0px,
+      rgb(0 0 0 / 0.22) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  /* The LCD strip a figure is printed on. */
+  .lcd {
+    background: var(--color-lcd);
+    border: 1px solid var(--color-crt-edge);
+    color: var(--color-lcd-ink);
+    text-shadow: 0 0 6px rgb(111 227 160 / 0.45);
+  }
+}
+
+/**
+ * The beam sweep.
+ *
+ * A slow bright band crossing the screen, the way a scope redraws. It is the
+ * one piece of motion on the page and it earns its place by making the screen
+ * read as live rather than printed — which is exactly the wrong thing to
+ * inflict on someone who asked for less movement, hence the gate below.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .sweep {
+    animation: sweep 7s linear infinite;
+  }
+
+  @keyframes sweep {
+    0% {
+      transform: translateX(-12%);
+      opacity: 0;
+    }
+    8% {
+      opacity: 0.5;
+    }
+    92% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateX(112%);
+      opacity: 0;
+    }
+  }
+
+  .bar-fill {
+    transition: width 180ms ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sweep {
+    display: none;
+  }
+}
