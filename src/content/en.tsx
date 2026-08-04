@@ -445,6 +445,34 @@ export const EN: Copy = {
       after: ['What holding it costs', 'Hours a day, once the bar has moved'],
       margin: ['What you keep', 'In old-money hours'],
     },
+    loop: {
+      title: 'Why there are two ceilings',
+      body: (
+        <>
+          <p>
+            Checking measures what came out and sends part of it back to be done again. That is a
+            feedback loop, and the model can be written in a loop's own notation without changing a
+            symbol: with A the gain before checking,
+          </p>
+        </>
+      ),
+      openLoop: 'Before checking',
+      closedLoop: 'What you get',
+      feedbackCeiling: 'Limit of the loop, 1/r',
+      consequence: (
+        <>
+          <p>
+            Which produces the result every control engineer knows: once the forward gain is large,
+            the output stops depending on it and is set by the return path alone. Make the assistant
+            arbitrarily fast and you converge on 1/r — a ceiling with nothing to do with Amdahl.
+          </p>
+          <p>
+            So there are two limits on the same quantity, from two unrelated causes, and the smaller
+            is the one you live under. At a wide reach it is this one.
+          </p>
+        </>
+      ),
+    },
     curveKicker: 'The curve that flattens',
     curveCaption: (
       <>
@@ -509,28 +537,33 @@ export const EN: Copy = {
 
   reactor: {
     designator: 'The reactor',
-    title: 'The same model, read as a reaction',
-    sub: 'Chemical kinetics and control theory have been describing this shape for a century, under other names. Four of their results are not decoration here: two are the same algebra written differently, one names which fader to move, and one says the model is optimistic in a way that can be pointed at.',
+    title: 'The same day, read as a reaction',
+    sub: 'Work that advances, a step you speed up, a correction that undoes part of it, and a person who can only check so much. Chemistry has had the arithmetic for that since before computers existed.',
     lead: (
       <p>
-        Nothing here changes the arithmetic on the other tabs. What it changes is what you can see
-        in it — including one result that argues against this page's own advice.
+        Some of what follows is a comparison. Two pieces of it are not: the formulas match, and the
+        conclusions chemists draw from them apply here unchanged.
       </p>
     ),
-    series: {
-      title: 'Resistances in series',
+    limiting: {
+      title: 'The slowest step sets the pace',
       body: (
         <>
           <p>
-            Amdahl's formula is a sum of residence times: amount over rate, per step, added
-            together. That is the algebra of resistances in series, and it yields the conclusion
-            chemical engineers reach about diffusion and reaction — if transport is limiting, a
-            better catalyst buys nothing at all.
+            Make a reaction in two steps and speed up only the first. Nothing changes, because the
+            second one was always the one keeping you waiting. Chemists call it the rate-limiting
+            step, and the arithmetic is the one on the walkthrough: time in each step, added
+            together.
           </p>
           <p>
-            The tool behaves like a catalyst in the strict sense: it lowers the barrier on the steps
-            it touches, leaves the others alone, and does not move the equilibrium. It only gets you
-            there sooner.
+            Which is why a better catalyst can be worth nothing at all. If the reagent is not
+            arriving at the surface fast enough, making the surface more reactive changes nothing —
+            the reaction is waiting on transport, not on chemistry. The meeting is the transport
+            step.
+          </p>
+          <p>
+            One number tells you which case you are in: the time in the assisted step divided by the
+            time in the step the tool cannot touch.
           </p>
         </>
       ),
@@ -539,154 +572,163 @@ export const EN: Copy = {
       kicker: 'Which step is limiting',
       reachLimited: (
         <>
-          Below 1: <strong className="font-semibold">the step the tool cannot touch dominates.</strong>{' '}
-          You are transport-limited, and a faster model is a better catalyst on a reaction already
-          waiting for something else. Widening reach is the only move that pays.
+          Under 1, the untouched step takes longer than the assisted one. You are waiting on
+          transport. A faster model is a better catalyst on a reaction that is already waiting for
+          something else, and <strong className="font-semibold">only reach pays</strong>.
         </>
       ),
       speedLimited: (
         <>
-          Above 1: <strong className="font-semibold">the tool is still the bottleneck.</strong> The
-          accelerated step takes longer than everything else combined, so speed is genuinely worth
-          buying — until this number crosses back under 1, which it will.
+          Over 1, the assisted step still takes longer than everything else combined.{' '}
+          <strong className="font-semibold">Speed is genuinely worth buying</strong> — until this
+          number falls back under 1, which buying speed will do.
         </>
       ),
     },
-    loop: {
-      title: 'A feedback loop, and where the second ceiling comes from',
+    catalyst: {
+      title: 'The tool is a catalyst',
       body: (
         <>
           <p>
-            Review measures the output and feeds part of it back as work to redo. That is a negative
-            feedback loop, and writing the model in the loop's own notation is not an analogy — the
-            two expressions are identical.
+            A catalyst lowers the barrier for a specific reaction, leaves the others alone, and is
+            not consumed. All three hold. What matters is the second: catalysts are picky. There is
+            no such thing as one that accelerates everything in the flask, which is the whole of why
+            reach is a number below 1.
+          </p>
+          <p>
+            And a fourth property, the one worth carrying away:{' '}
+            <strong className="font-semibold">a catalyst does not move the equilibrium.</strong> It
+            gets you to the same place sooner. Whether the same place is where you wanted to be is
+            not a question chemistry can answer.
           </p>
         </>
       ),
-      openLoop: 'Open loop, before review',
-      closedLoop: 'Closed loop, what you get',
-      feedbackCeiling: 'Feedback limit, 1/r',
-      consequence: (
+    },
+    reversible: {
+      title: 'Part of it runs backwards',
+      body: (
         <>
           <p>
-            Which produces the central result of feedback control: once the forward gain is large,
-            the closed-loop gain stops depending on it and is set by the feedback path alone. Push
-            the assistant arbitrarily hard and you converge on 1/r — a ceiling with nothing to do
-            with Amdahl, and the reason the instrument now shows two limits rather than one.
+            Few reactions go only one way. Product turns back into reagent, and the more product
+            there is, the faster it does — the reverse rate depends on how much you have made.
           </p>
           <p>
-            Two independent bounds on the same quantity, and the smaller is the one you live under.
-            At a wide reach it is this one.
+            That is exactly the shape of the checking term. It is not proportional to the work; it
+            is proportional to the time you saved, which is why saving more creates more of it. Set
+            it to 1 and forward and reverse cancel: the net advance is nil, and nothing is being
+            produced however fast the reaction runs. Chemists call that equilibrium. On the
+            walkthrough it is the point where the gain disappears.
           </p>
         </>
       ),
     },
     saturation: {
-      title: 'Your review capacity is finite, and the model pretends otherwise',
+      title: 'The reviewer saturates',
       body: (
         <>
           <p>
-            Treating <em>r</em> as a constant fraction says that checking twice as much output costs
-            exactly twice as much. That holds only while you are nowhere near your own limit.
+            Here is where the model on the other tabs is wrong, and it is worth being precise about
+            how.
           </p>
           <p>
-            Enzyme kinetics describes the other case: a fixed quantity of catalyst, throughput that
-            saturates, a queue that grows once substrate outruns it. Here <strong>you are the
-            enzyme</strong>, and this — rather than Brooks on coordination — is why three agent
-            sessions do not triple anything.
+            It treats checking as a fixed share: twice the output, twice the checking, forever. That
+            holds while you are far from your own limit and stops holding at it. Enzymes do the same
+            thing — the reaction rate climbs with substrate right up until every enzyme is busy, and
+            then it stops climbing no matter how much you add. The rest queues.
+          </p>
+          <p>
+            <strong className="font-semibold">You are the enzyme.</strong> There is one of you, your
+            reading speed is what it is, and an assistant that produces faster does not make you
+            read faster. This, rather than anything about coordination, is why three sessions at
+            once triple nothing.
           </p>
         </>
       ),
-      alt: 'Gain against speed, with review constant and with review saturating.',
+      alt: 'Gain against speed, with checking as a fixed share and with checking saturating.',
       xAxis: 'Speed-up on the assisted share',
-      constantLine: 'Review as a constant fraction — what the instrument computes',
-      saturatedLine: 'Review saturating',
+      constantLine: 'Checking as a fixed share — what the instrument computes',
+      saturatedLine: 'Checking that saturates',
       turnoverMark: 'turnover',
       turnover: (speed) => (
         <>
-          <strong className="text-ink font-semibold">At your reach there is a turnover.</strong> The
-          corrected curve peaks around {speed} and falls after it: past that point a faster
-          assistant makes your day <em>longer</em>, because it feeds a bottleneck that cannot drain
-          any quicker. That is Illich's counterproductivity threshold, arriving from kinetics rather
-          than from philosophy.
+          <strong className="text-ink font-semibold">At your reach the curve turns over.</strong> It
+          peaks near {speed} and falls after it. Past that point a faster assistant makes your day{' '}
+          <em>longer</em>: it fills a queue that cannot drain any quicker, and you spend the
+          difference reading.
         </>
       ),
       noTurnover: (ceiling) => (
         <>
-          <strong className="text-ink font-semibold">At your reach there is no turnover</strong> —
-          raw throughput never gets large enough to swamp the bottleneck. Saturation only lowers the
-          ceiling, to about {ceiling}. Widen reach and a turnover appears.
+          <strong className="text-ink font-semibold">At your reach the curve does not turn over.</strong>{' '}
+          Output never grows fast enough to swamp you, so saturation only lowers the ceiling — to
+          about {ceiling}. Widen reach and a turnover appears.
         </>
       ),
       consequence: (k) => (
         <>
           <p>
-            <strong className="text-ink font-semibold">Read this as a shape, not a measurement.</strong>{' '}
-            K — the throughput at which review capacity is half-saturated — is set to {k} here and
-            nothing calibrates it. Nobody has measured yours.
+            The turnover moves towards you as reach widens. More of your work assisted means more
+            output per hour, and the same person reading it.
           </p>
           <p>
-            The shape is the point, and it is uncomfortable: the wider the reach, the sooner extra
-            speed starts hurting. This page spends a whole walkthrough arguing that reach is the
-            term with leverage. Saturation is the caveat — widening what the tool touches without
-            also raising what you can absorb moves the turnover towards you.
+            That is awkward, because the walkthrough spends six questions arguing that reach is the
+            number worth moving. Both are true. Widening reach raises the ceiling and brings the
+            turnover closer, and which of the two you meet first depends on whether you also raised
+            what you can absorb.
+          </p>
+          <p>
+            <strong className="text-ink font-semibold">Read the shape, not the number.</strong> The
+            saturation constant is set to {k} here and nothing measures it. Where your own turnover
+            sits is not something this page knows.
           </p>
         </>
       ),
     },
-    residence: {
-      title: 'Residence time, and the case for uninterrupted blocks',
+    order: {
+      title: 'The model assumes a constant rate',
       body: (
         <>
           <p>
-            Two reactors of equal volume do not give equal conversion. A plug-flow reactor — where
-            everything enters and leaves in order — beats a perfectly mixed one, in which some
-            material short-circuits and some lingers.
+            Divide the work by the speed and you get the time. That is the arithmetic everywhere on
+            this site, and it contains an assumption: that the work goes at the same rate from the
+            first hour to the last, however much is left.
           </p>
           <p>
-            A protected block of concentration is plug flow. An open-plan afternoon with Slack open
-            is the mixed vessel: same hours in, worse conversion out, and it is the back-mixing that
-            costs you rather than the interruptions themselves.
+            Reactions rarely behave that way. Most slow down as the reagent runs out — the rate
+            depends on what remains, so the last of it takes disproportionately long. Anyone who has
+            watched a task sit at ninety per cent complete for two days has met the same curve.
           </p>
           <p>
-            This is the quantitative argument for the settings tab, and it is stronger than saying
-            context switching is bad.
+            So every figure here is the optimistic branch. Not by a factor you can correct for —
+            just optimistic, and worth remembering when the numbers feel generous.
           </p>
         </>
       ),
     },
     breaks: {
-      title: 'Where the analogy stops',
+      title: 'Where the chemistry stops helping',
       body: (
         <>
           <p>
-            The ratchet has a chemical cousin — autocatalysis, in which the product catalyses its
-            own formation. The mechanism matches; the behaviour does not. An autocatalytic reaction
-            stops, because it exhausts its substrate, and conservation of mass bounds it.
-            Expectations are made of nothing and have no such bound.
+            The ratchet has a cousin: autocatalysis, where the product speeds up its own formation.
+            The mechanism is the same — output raises expectations, which demand output — and for a
+            while the comparison is exact.
           </p>
           <p>
-            Control theory names it better: expectations behave like an integrator with no leak. A
-            pole at the origin, everything accumulating, nothing decaying. And Le Chatelier is the
-            sharp contrast — a system at equilibrium responds to a constraint by opposing it, while
-            the ratchet responds by reinforcing it.
+            Then it fails, for a reason that says something. An autocatalytic reaction stops. It runs
+            out of reagent, because matter is conserved and there is only ever so much in the flask.
+            Expectations are not made of anything. Nothing is conserved, so nothing runs out, and the
+            reaction has no natural end.
           </p>
           <p>
-            One more borrowing worth the name: Goodhart is the standard failure of controlling the
-            sensor rather than the variable. The display reads perfect while the thing it stood for
-            drifts.
+            Le Chatelier is the other place it breaks. Put a system under strain and it shifts to
+            relieve it — that is what equilibrium means. Show that you can work faster and the strain
+            does not relieve, it increases. No reaction does that, which is why the sources for the
+            last question on the walkthrough are a sociologist and an economist, not a chemist.
           </p>
         </>
       ),
     },
-    caveat: (
-      <>
-        One assumption stated plainly: the model is zero-order — time is amount over rate, and the
-        rate does not depend on how much is left. Real intellectual work is closer to first-order,
-        which is the familiar business of the last tenth taking most of the time. Amdahl is
-        optimistic about finishing, and everything built on it here inherits that.
-      </>
-    ),
   },
 
   battery: {

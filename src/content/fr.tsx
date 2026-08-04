@@ -475,6 +475,35 @@ export const FR: Copy = {
       after: ['Ce que tenir coûte', 'Heures par jour, une fois la barre montée'],
       margin: ['Ce que vous gardez', "En heures d'avant"],
     },
+    loop: {
+      title: 'Pourquoi il y a deux plafonds',
+      body: (
+        <>
+          <p>
+            La vérification mesure ce qui est sorti et en renvoie une part à refaire. C'est une
+            boucle de rétroaction, et le modèle s'écrit dans la notation d'une boucle sans changer un
+            symbole : avec A le gain avant relecture,
+          </p>
+        </>
+      ),
+      openLoop: 'Avant relecture',
+      closedLoop: 'Ce que vous obtenez',
+      feedbackCeiling: 'Limite de la boucle, 1/r',
+      consequence: (
+        <>
+          <p>
+            D'où le résultat que tout automaticien connaît : dès que le gain direct est grand, la
+            sortie cesse d'en dépendre et n'est plus fixée que par la chaîne de retour. Rendez
+            l'assistant aussi rapide que vous voulez, vous convergez vers 1/r — un plafond qui n'a
+            rien à voir avec Amdahl.
+          </p>
+          <p>
+            Il y a donc deux limites sur la même grandeur, de deux causes sans rapport, et c'est la
+            plus petite qui vous gouverne. À forte portée, c'est celle-ci.
+          </p>
+        </>
+      ),
+    },
     curveKicker: "La courbe qui s'aplatit",
     curveCaption: (
       <>
@@ -539,28 +568,32 @@ export const FR: Copy = {
 
   reactor: {
     designator: 'Le réacteur',
-    title: 'Le même modèle, lu comme une réaction',
-    sub: "La cinétique chimique et l'automatique décrivent cette forme depuis un siècle, sous d'autres noms. Quatre de leurs résultats ne sont pas décoratifs ici : deux sont la même algèbre écrite autrement, un désigne le curseur à toucher, et le dernier dit que le modèle est optimiste d'une façon qu'on peut montrer du doigt.",
+    title: 'La même journée, lue comme une réaction',
+    sub: "Un travail qui avance, une étape qu'on accélère, une correction qui en défait une partie, et quelqu'un qui ne peut relire qu'une certaine quantité. La chimie tient l'arithmétique de tout ça depuis avant les ordinateurs.",
     lead: (
       <p>
-        Rien ici ne change l'arithmétique des autres onglets. Ce que ça change, c'est ce qu'on y
-        voit — dont un résultat qui contredit le conseil que cette page donne.
+        Une partie de ce qui suit est une comparaison. Deux morceaux n'en sont pas : les formules
+        coïncident, et les conclusions que les chimistes en tirent s'appliquent ici telles quelles.
       </p>
     ),
-    series: {
-      title: 'Des résistances en série',
+    limiting: {
+      title: "L'étape la plus lente commande",
       body: (
         <>
           <p>
-            La formule d'Amdahl est une somme de temps de séjour : quantité sur vitesse, par étape,
-            additionnées. C'est l'algèbre de l'addition des résistances, et elle donne la conclusion
-            que les chimistes tirent de la diffusion et de la réaction — si le transport limite, un
-            meilleur catalyseur n'achète rigoureusement rien.
+            Prenez une réaction en deux étapes et accélérez seulement la première. Rien ne change,
+            parce que c'est la seconde qui vous faisait attendre. Les chimistes l'appellent l'étape
+            cinétiquement déterminante, et l'arithmétique est celle du pas-à-pas : le temps de chaque
+            étape, additionné.
           </p>
           <p>
-            L'outil se comporte en catalyseur au sens strict : il abaisse la barrière des étapes
-            qu'il touche, laisse les autres tranquilles, et ne déplace pas l'équilibre. Il y mène
-            seulement plus tôt.
+            D'où le fait qu'un meilleur catalyseur peut ne rien valoir. Si le réactif n'arrive pas
+            assez vite à la surface, rendre la surface plus réactive ne change rien — la réaction
+            attend le transport, pas la chimie. La réunion est l'étape de transport.
+          </p>
+          <p>
+            Un seul nombre dit dans quel cas vous êtes : le temps passé dans l'étape assistée divisé
+            par le temps passé dans celle que l'outil ne touche pas.
           </p>
         </>
       ),
@@ -569,160 +602,167 @@ export const FR: Copy = {
       kicker: 'Quelle étape limite',
       reachLimited: (
         <>
-          En dessous de 1 :{' '}
-          <strong className="font-semibold">l'étape que l'outil ne touche pas domine.</strong> Vous
-          êtes limité par le transport, et un modèle plus rapide est un meilleur catalyseur sur une
-          réaction qui attend déjà autre chose. Élargir la portée est le seul geste qui paie.
+          Sous 1, l'étape non touchée dure plus longtemps que l'étape assistée. Vous attendez le
+          transport. Un modèle plus rapide est un meilleur catalyseur sur une réaction qui attend
+          déjà autre chose, et <strong className="font-semibold">seule la portée paie</strong>.
         </>
       ),
       speedLimited: (
         <>
-          Au-dessus de 1 :{' '}
-          <strong className="font-semibold">l'outil est encore le goulot.</strong> L'étape accélérée
-          prend plus de temps que tout le reste réuni, donc la vitesse vaut réellement d'être
-          achetée — jusqu'à ce que ce chiffre repasse sous 1, ce qui arrivera.
+          Au-dessus de 1, l'étape assistée dure encore plus longtemps que tout le reste réuni.{' '}
+          <strong className="font-semibold">La vitesse vaut vraiment d'être achetée</strong> —
+          jusqu'à ce que ce nombre repasse sous 1, ce que l'achat de vitesse fera.
         </>
       ),
     },
-    loop: {
-      title: "Une boucle de retour, et d'où vient le second plafond",
+    catalyst: {
+      title: "L'outil est un catalyseur",
       body: (
         <>
           <p>
-            La vérification mesure la sortie et en réinjecte une part sous forme de travail à
-            refaire. C'est une boucle de rétroaction négative, et écrire le modèle dans la notation
-            de la boucle n'est pas une analogie — les deux expressions sont identiques.
+            Un catalyseur abaisse la barrière d'une réaction précise, laisse les autres tranquilles,
+            et n'est pas consommé. Les trois tiennent. C'est la deuxième qui compte : un catalyseur
+            est difficile. Il n'en existe aucun qui accélère tout ce qu'il y a dans le ballon, et
+            c'est toute la raison pour laquelle la portée est un nombre inférieur à 1.
+          </p>
+          <p>
+            Et une quatrième propriété, celle qu'il faut emporter :{' '}
+            <strong className="font-semibold">un catalyseur ne déplace pas l'équilibre.</strong> Il
+            vous mène au même endroit plus tôt. Savoir si cet endroit est celui que vous vouliez
+            n'est pas une question que la chimie traite.
           </p>
         </>
       ),
-      openLoop: 'Boucle ouverte, avant relecture',
-      closedLoop: 'Boucle fermée, ce que vous obtenez',
-      feedbackCeiling: 'Limite de la boucle, 1/r',
-      consequence: (
+    },
+    reversible: {
+      title: 'Une partie repart en arrière',
+      body: (
         <>
           <p>
-            D'où le résultat central de l'asservissement : dès que le gain direct est grand, le gain
-            en boucle fermée cesse d'en dépendre et n'est plus fixé que par la chaîne de retour.
-            Poussez l'assistant aussi loin que vous voulez, vous convergez vers 1/r — un plafond qui
-            n'a rien à voir avec Amdahl, et la raison pour laquelle l'instrument affiche désormais
-            deux limites au lieu d'une.
+            Peu de réactions vont dans un seul sens. Le produit redevient réactif, et plus il y a de
+            produit, plus vite cela se fait — la vitesse inverse dépend de ce que vous avez fabriqué.
           </p>
           <p>
-            Deux bornes indépendantes sur la même grandeur, et c'est la plus petite qui vous
-            gouverne. À forte portée, c'est celle-ci.
+            C'est exactement la forme du terme de vérification. Il n'est pas proportionnel au
+            travail, il est proportionnel au temps gagné, ce qui explique qu'en gagner plus en
+            fabrique davantage. Mettez-le à 1 et directe et inverse s'annulent : l'avancement net est
+            nul, rien n'est produit quelle que soit la vitesse de la réaction. Les chimistes appellent
+            ça l'équilibre. Sur le pas-à-pas, c'est le point où le gain disparaît.
           </p>
         </>
       ),
     },
     saturation: {
-      title: 'Votre capacité de relecture est finie, et le modèle fait comme si elle ne l\'était pas',
+      title: 'Le relecteur sature',
       body: (
         <>
           <p>
-            Traiter <em>r</em> comme une fraction constante revient à dire que relire deux fois plus
-            de sorties coûte exactement deux fois plus. Ce n'est vrai que tant qu'on est loin de sa
-            propre limite.
+            Voici où le modèle des autres onglets est faux, et il vaut la peine d'être précis sur la
+            manière.
           </p>
           <p>
-            La cinétique enzymatique décrit l'autre cas : une quantité fixe de catalyseur, un débit
-            qui sature, une file d'attente qui grossit dès que le substrat le dépasse. Ici{' '}
-            <strong>c'est vous l'enzyme</strong>, et c'est cela — plutôt que Brooks et la
-            coordination — qui explique que trois sessions d'agent ne triplent rien.
+            Il traite la vérification comme une part fixe : deux fois plus de sorties, deux fois plus
+            de relecture, indéfiniment. C'est vrai tant qu'on est loin de sa propre limite et faux
+            une fois dessus. Les enzymes font pareil — la vitesse monte avec le substrat jusqu'à ce
+            que chaque enzyme soit occupée, puis elle cesse de monter quoi qu'on ajoute. Le reste
+            fait la queue.
+          </p>
+          <p>
+            <strong className="font-semibold">L'enzyme, c'est vous.</strong> Vous êtes un, votre
+            vitesse de lecture est ce qu'elle est, et un assistant qui produit plus vite ne vous fait
+            pas lire plus vite. C'est cela, et non une histoire de coordination, qui fait que trois
+            sessions simultanées ne triplent rien.
           </p>
         </>
       ),
-      alt: 'Gain en fonction de la vitesse, à vérification constante puis saturante.',
+      alt: 'Gain en fonction de la vitesse, à vérification fixe puis saturante.',
       xAxis: 'Accélération sur la part assistée',
-      constantLine: "Vérification à fraction constante — ce que l'instrument calcule",
+      constantLine: "Vérification à part fixe — ce que l'instrument calcule",
       saturatedLine: 'Vérification qui sature',
       turnoverMark: 'retournement',
       turnover: (speed) => (
         <>
-          <strong className="text-ink font-semibold">À votre portée, il y a un retournement.</strong>{' '}
-          La courbe corrigée culmine vers {speed} puis redescend : au-delà, un assistant plus rapide
-          rend votre journée <em>plus longue</em>, parce qu'il alimente un goulot qui ne se vide pas
-          plus vite. C'est le seuil de contre-productivité d'Illich, obtenu par la cinétique au lieu
-          de la philosophie.
+          <strong className="text-ink font-semibold">À votre portée, la courbe se retourne.</strong>{' '}
+          Elle culmine vers {speed} et redescend ensuite. Passé ce point, un assistant plus rapide
+          rend votre journée <em>plus longue</em> : il remplit une file qui ne se vide pas plus vite,
+          et vous passez la différence à lire.
         </>
       ),
       noTurnover: (ceiling) => (
         <>
-          <strong className="text-ink font-semibold">À votre portée, pas de retournement</strong> —
-          le débit brut ne devient jamais assez grand pour noyer le goulot. La saturation ne fait
-          qu'abaisser le plafond, à environ {ceiling}. Élargissez la portée et un retournement
-          apparaît.
+          <strong className="text-ink font-semibold">À votre portée, la courbe ne se retourne pas.</strong>{' '}
+          La production ne croît jamais assez pour vous noyer, donc la saturation ne fait qu'abaisser
+          le plafond — à environ {ceiling}. Élargissez la portée et un retournement apparaît.
         </>
       ),
       consequence: (k) => (
         <>
           <p>
-            <strong className="text-ink font-semibold">À lire comme une forme, pas comme une mesure.</strong>{' '}
-            K — le débit auquel la capacité de relecture est à demi-saturée — vaut {k} ici et rien ne
-            l'étalonne. Personne n'a mesuré le vôtre.
+            Le retournement se rapproche à mesure que la portée s'élargit. Plus de travail assisté
+            veut dire plus de sorties par heure, et la même personne pour les lire.
           </p>
           <p>
-            La forme, elle, est gênante : plus la portée est large, plus tôt la vitesse
-            supplémentaire commence à nuire. Cette page consacre tout un pas-à-pas à défendre que la
-            portée est le terme qui a du levier. La saturation est la réserve — élargir ce que
-            l'outil touche sans élever ce que vous pouvez absorber rapproche le retournement de vous.
+            C'est embarrassant, parce que le pas-à-pas passe six questions à défendre que la portée
+            est le nombre qui mérite d'être bougé. Les deux sont vrais. Élargir la portée monte le
+            plafond et rapproche le retournement ; lequel des deux vous rencontrez d'abord dépend de
+            si vous avez aussi élevé ce que vous pouvez absorber.
+          </p>
+          <p>
+            <strong className="text-ink font-semibold">Lisez la forme, pas le nombre.</strong> La
+            constante de saturation vaut {k} ici et rien ne la mesure. Où se situe votre propre
+            retournement, cette page l'ignore.
           </p>
         </>
       ),
     },
-    residence: {
-      title: 'Le temps de séjour, et la défense des blocs ininterrompus',
+    order: {
+      title: 'Le modèle suppose une vitesse constante',
       body: (
         <>
           <p>
-            Deux réacteurs de même volume ne donnent pas la même conversion. Le réacteur piston — où
-            tout entre et sort dans l'ordre — bat le réacteur parfaitement agité, dans lequel une
-            partie court-circuite et une autre stagne.
+            Divisez le travail par la vitesse et vous avez le temps. C'est l'arithmétique de tout ce
+            site, et elle contient une hypothèse : que le travail avance au même rythme de la
+            première heure à la dernière, quelle que soit la quantité restante.
           </p>
           <p>
-            Un bloc de concentration protégé est un piston. Un après-midi en open space avec Slack
-            ouvert est la cuve agitée : mêmes heures en entrée, moins bonne conversion en sortie, et
-            c'est le rétromélange qui vous coûte, pas les interruptions elles-mêmes.
+            Les réactions se comportent rarement ainsi. La plupart ralentissent à mesure que le
+            réactif s'épuise — la vitesse dépend de ce qui reste, donc la fin prend un temps
+            disproportionné. Quiconque a vu une tâche stagner à quatre-vingt-dix pour cent pendant
+            deux jours a rencontré la même courbe.
           </p>
           <p>
-            C'est l'argument quantitatif de l'onglet « En pratique », et il est plus solide que de
-            dire que changer de contexte, c'est mal.
+            Tous les chiffres d'ici sont donc la branche optimiste. Pas d'un facteur qu'on pourrait
+            corriger — optimiste, simplement, et bon à se rappeler quand les nombres paraissent
+            généreux.
           </p>
         </>
       ),
     },
     breaks: {
-      title: "Où l'analogie s'arrête",
+      title: "Où la chimie cesse de servir",
       body: (
         <>
           <p>
-            L'effet cliquet a un cousin chimique — l'autocatalyse, où le produit catalyse sa propre
-            formation. Le mécanisme correspond ; le comportement, non. Une réaction autocatalytique
-            s'arrête, parce qu'elle épuise son substrat, et la conservation de la matière lui met une
-            borne. Les attentes ne sont faites de rien et n'ont pas cette borne.
+            L'effet cliquet a un cousin : l'autocatalyse, où le produit accélère sa propre formation.
+            Le mécanisme est le même — la production fait monter les attentes, qui réclament de la
+            production — et pendant un temps la comparaison est exacte.
           </p>
           <p>
-            L'automatique le nomme mieux : les attentes se comportent comme un intégrateur sans
-            fuite. Un pôle à l'origine, tout s'accumule, rien ne décroît. Et Le Chatelier est le
-            contraste net — un système à l'équilibre répond à une contrainte en s'y opposant, quand
-            le cliquet répond en la renforçant.
+            Puis elle échoue, pour une raison qui dit quelque chose. Une réaction autocatalytique
+            s'arrête. Elle épuise son réactif, parce que la matière se conserve et qu'il n'y en a
+            jamais qu'une certaine quantité dans le ballon. Les attentes ne sont faites de rien. Rien
+            ne s'y conserve, donc rien ne s'épuise, et la réaction n'a pas de fin naturelle.
           </p>
           <p>
-            Un dernier emprunt qui mérite son nom : Goodhart est le défaut classique de
-            l'asservissement du capteur au lieu de la grandeur. L'affichage est parfait pendant que
-            la chose qu'il représentait dérive.
+            Le Chatelier est l'autre endroit où ça casse. Mettez un système sous contrainte et il se
+            déplace pour la soulager — c'est ce que veut dire équilibre. Montrez que vous pouvez
+            travailler plus vite et la contrainte ne se soulage pas, elle augmente. Aucune réaction
+            ne fait ça, et c'est pourquoi les sources de la dernière question du pas-à-pas sont un
+            sociologue et un économiste, pas un chimiste.
           </p>
         </>
       ),
     },
-    caveat: (
-      <>
-        Une hypothèse dite franchement : le modèle est d'ordre zéro — le temps vaut quantité sur
-        vitesse, et la vitesse ne dépend pas de ce qu'il reste. Le travail intellectuel réel est plus
-        proche de l'ordre un, ce qui est l'affaire bien connue du dernier dixième qui prend
-        l'essentiel du temps. Amdahl est optimiste sur la fin des tâches, et tout ce qui est bâti
-        dessus en hérite.
-      </>
-    ),
   },
 
   battery: {

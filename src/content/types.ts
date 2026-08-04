@@ -118,6 +118,14 @@ export type Copy = {
       after: [string, string];
       margin: [string, string];
     };
+    loop: {
+      title: string;
+      body: ReactNode;
+      openLoop: string;
+      closedLoop: string;
+      feedbackCeiling: string;
+      consequence: ReactNode;
+    };
     curveKicker: string;
     curveCaption: ReactNode;
     metersKicker: string;
@@ -150,16 +158,10 @@ export type Copy = {
     title: string;
     sub: string;
     lead: ReactNode;
-    series: { title: string; body: ReactNode };
+    limiting: { title: string; body: ReactNode };
     damkohler: { kicker: string; reachLimited: ReactNode; speedLimited: ReactNode };
-    loop: {
-      title: string;
-      body: ReactNode;
-      openLoop: string;
-      closedLoop: string;
-      feedbackCeiling: string;
-      consequence: ReactNode;
-    };
+    catalyst: { title: string; body: ReactNode };
+    reversible: { title: string; body: ReactNode };
     saturation: {
       title: string;
       body: ReactNode;
@@ -172,9 +174,8 @@ export type Copy = {
       noTurnover: (ceiling: string) => ReactNode;
       consequence: (k: string) => ReactNode;
     };
-    residence: { title: string; body: ReactNode };
+    order: { title: string; body: ReactNode };
     breaks: { title: string; body: ReactNode };
-    caveat: ReactNode;
   };
 
   battery: {

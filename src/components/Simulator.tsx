@@ -1,5 +1,6 @@
 import { Oscilloscope, ScopeLegend } from './Oscilloscope';
 import { Display } from './Latex';
+import { relativeTime } from '../lib/model';
 import { Metrics, Note, SectionHead } from './Cards';
 import { Console, type Channel } from './Fields';
 import { useCopy } from '../content';
@@ -173,6 +174,29 @@ export function Simulator({
             },
           ]}
         />
+
+        {/* Two ceilings appear in the readouts above; this is why. */}
+        <section className="mt-12 max-w-[63ch]">
+          <h3 className="mb-3 text-[21px] font-bold tracking-[-0.01em]">{c.loop.title}</h3>
+          <div className="[&_p]:mb-5">{c.loop.body}</div>
+
+          <Display name="closedLoop" />
+
+          <dl className="border-rule mt-6 grid gap-x-8 gap-y-3 border-t pt-4 text-[15px] sm:grid-cols-3">
+            {[
+              { t: c.loop.openLoop, v: f.times(1 / relativeTime(inputs.share, inputs.speed)) },
+              { t: c.loop.closedLoop, v: f.times(result.gain) },
+              { t: c.loop.feedbackCeiling, v: f.times(1 / inputs.review) },
+            ].map((i) => (
+              <div key={i.t}>
+                <dt className="caption">{i.t}</dt>
+                <dd className="font-mono tabular mt-0.5 text-[19px] font-semibold">{i.v}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="mt-6 [&_p]:mb-5">{c.loop.consequence}</div>
+        </section>
 
         <h3 className="kicker mt-11 mb-2">{c.curveKicker}</h3>
         <Oscilloscope share={inputs.share} speed={inputs.speed} review={inputs.review} />

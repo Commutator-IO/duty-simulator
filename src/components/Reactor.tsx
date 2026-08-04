@@ -1,6 +1,6 @@
 import { useCopy } from '../content';
 import { SectionHead } from './Cards';
-import { Display, Latex } from './Latex';
+import { Latex } from './Latex';
 import {
   SATURATION_K,
   damkohler,
@@ -8,25 +8,21 @@ import {
   limitingStep,
   relativeTime,
   saturatedGain,
-  simulate,
   turnoverSpeed,
   type Inputs,
 } from '../lib/model';
 
 /**
- * The model read as a reaction, and as a loop.
+ * The model read as a reaction.
  *
- * This tab exists for the results that change what the instrument means, not
- * for the ones that merely decorate it. Three do real work:
+ * Kinetics only. The control-theory reading of the same equations lives on the
+ * instrument, next to the two ceilings it explains — putting it here made this
+ * tab a grab-bag of everything the analysis turned up rather than one argument.
  *
- *  - Damköhler names the limiting step, and therefore which fader to move.
- *  - The closed-loop form explains why there is a second ceiling at all — the
- *    one the instrument now shows — and where 1/r comes from.
- *  - Saturation says the model is optimistic in a precise, correctable way, and
- *    produces the one result here that argues against the page's own advice.
- *
- * The heat balance that used to sit here has gone: it duplicated the battery
- * and its crossing degenerated at the default hours.
+ * The arc is the one a kinetics course takes: the limiting step, the catalyst,
+ * the reverse rate, saturation, and the order of the reaction. Each idea is put
+ * in ordinary words before it is named, which is the house rule and which the
+ * previous version of this tab broke on every heading.
  */
 
 const W = 640;
@@ -143,10 +139,8 @@ export function Reactor({ inputs }: { inputs: Inputs }) {
   const c = copy.reactor;
   const f = copy.format;
 
-  const r = simulate(inputs);
   const Da = damkohler(inputs.share, inputs.speed);
   const limiting = limitingStep(inputs.share, inputs.speed);
-  const openLoop = 1 / relativeTime(inputs.share, inputs.speed);
 
   return (
     <>
@@ -155,10 +149,10 @@ export function Reactor({ inputs }: { inputs: Inputs }) {
         <div className="max-w-[63ch] [&_p]:mb-5">{c.lead}</div>
       </section>
 
-      {/* 1 — which step limits */}
+      {/* The limiting step, and the number that names it. */}
       <section className="mt-12">
-        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.series.title}</h3>
-        <div className="max-w-[63ch] [&_p]:mb-5">{c.series.body}</div>
+        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.limiting.title}</h3>
+        <div className="max-w-[63ch] [&_p]:mb-5">{c.limiting.body}</div>
 
         <div className="border-brass bg-panel mt-6 border border-l-[3px] px-5 py-4">
           <p className="kicker mb-2">{c.damkohler.kicker}</p>
@@ -171,30 +165,22 @@ export function Reactor({ inputs }: { inputs: Inputs }) {
         </div>
       </section>
 
-      {/* 2 — the loop, and where the second ceiling comes from */}
       <section className="mt-14">
-        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.loop.title}</h3>
-        <div className="max-w-[63ch] [&_p]:mb-5">{c.loop.body}</div>
-
-        <Display name="closedLoop" />
-
-        <dl className="border-rule mt-6 grid gap-x-8 gap-y-3 border-t pt-4 text-[15px] sm:grid-cols-3">
-          {[
-            { t: c.loop.openLoop, v: f.times(openLoop) },
-            { t: c.loop.closedLoop, v: f.times(r.gain) },
-            { t: c.loop.feedbackCeiling, v: f.times(1 / inputs.review) },
-          ].map((i) => (
-            <div key={i.t}>
-              <dt className="caption">{i.t}</dt>
-              <dd className="font-mono tabular mt-0.5 text-[19px] font-semibold">{i.v}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <div className="mt-6 max-w-[63ch] [&_p]:mb-5">{c.loop.consequence}</div>
+        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.catalyst.title}</h3>
+        <div className="max-w-[63ch] [&_p]:mb-5">{c.catalyst.body}</div>
       </section>
 
-      {/* 3 — saturation: the model is optimistic, precisely here */}
+      <section className="mt-14">
+        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.reversible.title}</h3>
+        <div className="max-w-[63ch] [&_p]:mb-5">{c.reversible.body}</div>
+        <div className="max-w-[63ch]">
+          <p className="bg-panel border-brass-soft my-5 overflow-x-auto border-l-2 px-3.5 py-3">
+            <Latex name="review" />
+          </p>
+        </div>
+      </section>
+
+      {/* Saturation: where the model is optimistic, precisely. */}
       <section className="mt-14">
         <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.saturation.title}</h3>
         <div className="max-w-[63ch] [&_p]:mb-5">{c.saturation.body}</div>
@@ -210,19 +196,17 @@ export function Reactor({ inputs }: { inputs: Inputs }) {
         </div>
       </section>
 
-      {/* 4 — residence time: the quantitative case for blocks */}
       <section className="mt-14">
-        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.residence.title}</h3>
-        <div className="max-w-[63ch] [&_p]:mb-5">{c.residence.body}</div>
+        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.order.title}</h3>
+        <div className="max-w-[63ch] [&_p]:mb-5">{c.order.body}</div>
       </section>
 
-      {/* 5 — where it stops */}
+      {/* Where it stops being useful. */}
       <section className="mt-14">
         <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.breaks.title}</h3>
         <div className="max-w-[63ch] [&_p]:mb-5">{c.breaks.body}</div>
       </section>
 
-      <p className="caption border-rule mt-14 max-w-[68ch] border-t pt-5">{c.caveat}</p>
     </>
   );
 }
