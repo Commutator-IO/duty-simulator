@@ -510,91 +510,181 @@ export const EN: Copy = {
   reactor: {
     designator: 'The reactor',
     title: 'The same model, read as a reaction',
-    sub: 'Chemical engineering has been describing this shape for a century, under other names. Three of its ideas are not decoration here — they are the same arithmetic, and one of them adds a number worth having.',
+    sub: 'Chemical kinetics and control theory have been describing this shape for a century, under other names. Four of their results are not decoration here: two are the same algebra written differently, one names which fader to move, and one says the model is optimistic in a way that can be pointed at.',
     lead: (
-      <p className="mb-5 max-w-[62ch]">
-        None of what follows changes the model. It changes what you can see in it, and it gives the
-        page the one thing it was missing: a single figure that says which fader to touch.
+      <p>
+        Nothing here changes the arithmetic on the other tabs. What it changes is what you can see
+        in it — including one result that argues against this page's own advice.
       </p>
     ),
+    series: {
+      title: 'Resistances in series',
+      body: (
+        <>
+          <p>
+            Amdahl's formula is a sum of residence times: amount over rate, per step, added
+            together. That is the algebra of resistances in series, and it yields the conclusion
+            chemical engineers reach about diffusion and reaction — if transport is limiting, a
+            better catalyst buys nothing at all.
+          </p>
+          <p>
+            The tool behaves like a catalyst in the strict sense: it lowers the barrier on the steps
+            it touches, leaves the others alone, and does not move the equilibrium. It only gets you
+            there sooner.
+          </p>
+        </>
+      ),
+    },
     damkohler: {
       kicker: 'Which step is limiting',
       reachLimited: (
         <>
           Below 1: <strong className="font-semibold">the step the tool cannot touch dominates.</strong>{' '}
-          You are transport-limited, and a faster model is a better catalyst on a reaction that is
-          already waiting for something else. Widening reach is the only move that pays.
+          You are transport-limited, and a faster model is a better catalyst on a reaction already
+          waiting for something else. Widening reach is the only move that pays.
         </>
       ),
       speedLimited: (
         <>
           Above 1: <strong className="font-semibold">the tool is still the bottleneck.</strong> The
-          accelerated step is taking longer than everything else put together, so speed is genuinely
-          worth buying — until this number crosses back under 1, which it will.
+          accelerated step takes longer than everything else combined, so speed is genuinely worth
+          buying — until this number crosses back under 1, which it will.
         </>
       ),
     },
-    balance: {
-      kicker: 'The heat balance',
-      alt: 'Load generated against removal capacity, as drain rises.',
-      xAxis: 'How draining an hour is',
-      generation: 'Generated: hours × drain',
-      removal: 'Removal capacity: the sustainable budget',
-      withoutAi: 'What the same day cost without the tool',
-      reading: (runaway, breakEven) => (
+    loop: {
+      title: 'A feedback loop, and where the second ceiling comes from',
+      body: (
         <>
-          <strong className="text-ink font-semibold">Reading it.</strong> The rising line is what
-          your day generates; the flat red one is what you can carry away, and it does not rise
-          because you are busy. They cross at a drain of {runaway} — past that the day stops being
-          repeatable. The blue line crosses at {breakEven}, which is where the short day starts
-          costing more than the long one. Whichever crossing comes first is your real limit, and on
-          many settings it is the red one.
+          <p>
+            Review measures the output and feeds part of it back as work to redo. That is a negative
+            feedback loop, and writing the model in the loop's own notation is not an analogy — the
+            two expressions are identical.
+          </p>
+        </>
+      ),
+      openLoop: 'Open loop, before review',
+      closedLoop: 'Closed loop, what you get',
+      feedbackCeiling: 'Feedback limit, 1/r',
+      consequence: (
+        <>
+          <p>
+            Which produces the central result of feedback control: once the forward gain is large,
+            the closed-loop gain stops depending on it and is set by the feedback path alone. Push
+            the assistant arbitrarily hard and you converge on 1/r — a ceiling with nothing to do
+            with Amdahl, and the reason the instrument now shows two limits rather than one.
+          </p>
+          <p>
+            Two independent bounds on the same quantity, and the smaller is the one you live under.
+            At a wide reach it is this one.
+          </p>
         </>
       ),
     },
-    mappings: (
-      <>
-        <h3 className="mb-3 text-[21px] font-bold">Resistances in series</h3>
-        <p>
-          Amdahl's formula is a sum of residence times: amount over rate, for each step, added
-          together. That is the same algebra as adding resistances, and it produces the same
-          conclusion chemical engineers reach about diffusion and reaction — if transport is
-          limiting, a better catalyst buys nothing. The meeting is the diffusion step.
-        </p>
-        <p>
-          The tool behaves like a catalyst in the strict sense too: it lowers the barrier on the
-          steps it touches, leaves the others alone, and — worth remembering — a catalyst does not
-          move the equilibrium. It only gets you there sooner.
-        </p>
-
-        <h3 className="mt-8 mb-3 text-[21px] font-bold">A reverse rate</h3>
-        <p>
-          The review term is <em>r × (1 − t)</em>: proportional to the advance already made. That is
-          the shape of a reverse rate proportional to product concentration — the more you have
-          produced, the more there is to convert back. At r = 1 forward and reverse match exactly
-          and the net advance is nil, which is an equilibrium in the ordinary chemical sense.
-        </p>
-
-        <h3 className="mt-8 mb-3 text-[21px] font-bold">Where the analogy stops</h3>
-        <p>
-          The ratchet has a chemical cousin — autocatalysis, where the product catalyses its own
-          formation — but the resemblance ends at the mechanism. An autocatalytic reaction stops,
-          because it runs out of substrate; conservation of mass puts a bound on it. Expectations
-          are not made of anything and have no such bound.
-        </p>
-        <p>
-          Le Chatelier is the sharper contrast. A system at equilibrium responds to a constraint by
-          opposing it. The ratchet responds by reinforcing it. That is why no law of thermodynamics
-          appears among the sources, and Roy and Gustafson do.
-        </p>
-      </>
-    ),
+    saturation: {
+      title: 'Your review capacity is finite, and the model pretends otherwise',
+      body: (
+        <>
+          <p>
+            Treating <em>r</em> as a constant fraction says that checking twice as much output costs
+            exactly twice as much. That holds only while you are nowhere near your own limit.
+          </p>
+          <p>
+            Enzyme kinetics describes the other case: a fixed quantity of catalyst, throughput that
+            saturates, a queue that grows once substrate outruns it. Here <strong>you are the
+            enzyme</strong>, and this — rather than Brooks on coordination — is why three agent
+            sessions do not triple anything.
+          </p>
+        </>
+      ),
+      alt: 'Gain against speed, with review constant and with review saturating.',
+      xAxis: 'Speed-up on the assisted share',
+      constantLine: 'Review as a constant fraction — what the instrument computes',
+      saturatedLine: 'Review saturating',
+      turnoverMark: 'turnover',
+      turnover: (speed) => (
+        <>
+          <strong className="text-ink font-semibold">At your reach there is a turnover.</strong> The
+          corrected curve peaks around {speed} and falls after it: past that point a faster
+          assistant makes your day <em>longer</em>, because it feeds a bottleneck that cannot drain
+          any quicker. That is Illich's counterproductivity threshold, arriving from kinetics rather
+          than from philosophy.
+        </>
+      ),
+      noTurnover: (ceiling) => (
+        <>
+          <strong className="text-ink font-semibold">At your reach there is no turnover</strong> —
+          raw throughput never gets large enough to swamp the bottleneck. Saturation only lowers the
+          ceiling, to about {ceiling}. Widen reach and a turnover appears.
+        </>
+      ),
+      consequence: (k) => (
+        <>
+          <p>
+            <strong className="text-ink font-semibold">Read this as a shape, not a measurement.</strong>{' '}
+            K — the throughput at which review capacity is half-saturated — is set to {k} here and
+            nothing calibrates it. Nobody has measured yours.
+          </p>
+          <p>
+            The shape is the point, and it is uncomfortable: the wider the reach, the sooner extra
+            speed starts hurting. This page spends a whole walkthrough arguing that reach is the
+            term with leverage. Saturation is the caveat — widening what the tool touches without
+            also raising what you can absorb moves the turnover towards you.
+          </p>
+        </>
+      ),
+    },
+    residence: {
+      title: 'Residence time, and the case for uninterrupted blocks',
+      body: (
+        <>
+          <p>
+            Two reactors of equal volume do not give equal conversion. A plug-flow reactor — where
+            everything enters and leaves in order — beats a perfectly mixed one, in which some
+            material short-circuits and some lingers.
+          </p>
+          <p>
+            A protected block of concentration is plug flow. An open-plan afternoon with Slack open
+            is the mixed vessel: same hours in, worse conversion out, and it is the back-mixing that
+            costs you rather than the interruptions themselves.
+          </p>
+          <p>
+            This is the quantitative argument for the settings tab, and it is stronger than saying
+            context switching is bad.
+          </p>
+        </>
+      ),
+    },
+    breaks: {
+      title: 'Where the analogy stops',
+      body: (
+        <>
+          <p>
+            The ratchet has a chemical cousin — autocatalysis, in which the product catalyses its
+            own formation. The mechanism matches; the behaviour does not. An autocatalytic reaction
+            stops, because it exhausts its substrate, and conservation of mass bounds it.
+            Expectations are made of nothing and have no such bound.
+          </p>
+          <p>
+            Control theory names it better: expectations behave like an integrator with no leak. A
+            pole at the origin, everything accumulating, nothing decaying. And Le Chatelier is the
+            sharp contrast — a system at equilibrium responds to a constraint by opposing it, while
+            the ratchet responds by reinforcing it.
+          </p>
+          <p>
+            One more borrowing worth the name: Goodhart is the standard failure of controlling the
+            sensor rather than the variable. The display reads perfect while the thing it stood for
+            drifts.
+          </p>
+        </>
+      ),
+    },
     caveat: (
       <>
-        One assumption stated plainly: this model is zero-order — time is amount over rate, and the
+        One assumption stated plainly: the model is zero-order — time is amount over rate, and the
         rate does not depend on how much is left. Real intellectual work is closer to first-order,
         which is the familiar business of the last tenth taking most of the time. Amdahl is
-        optimistic about finishing, and so is everything built on it here.
+        optimistic about finishing, and everything built on it here inherits that.
       </>
     ),
   },

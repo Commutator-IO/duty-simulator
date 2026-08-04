@@ -15,7 +15,8 @@ import {
   ratchetVerdict,
   relativeTime,
   SUSTAINABLE_LOAD,
-  heatBalance,
+  saturatedGain,
+  turnoverSpeed,
   simulate,
 } from './model';
 
@@ -229,23 +230,39 @@ describe('Damköhler', () => {
   });
 });
 
-describe('the heat balance', () => {
-  it('puts the runaway crossing where the load meets the budget', () => {
-    const h = heatBalance(DEFAULTS);
-    expect(DEFAULTS.hours * h.runaway).toBeCloseTo(SUSTAINABLE_LOAD, 10);
+describe('saturating review', () => {
+  it('never flatters the constant-fraction model', () => {
+    // The correction can only add review time, so it can only lower the gain.
+    for (const p of [0.3, 0.6, 0.9]) {
+      for (const s of [1.2, 3, 8, 50]) {
+        expect(saturatedGain(p, s, 0.25)).toBeLessThanOrEqual(gain(p, s, 0.25) + 1e-12);
+      }
+    }
   });
 
-  it('puts the break-even crossing at the gain, as the instrument does', () => {
-    const h = heatBalance(DEFAULTS);
-    expect(h.breakEven).toBeCloseTo(simulate(DEFAULTS).gain, 10);
+  it('changes nothing when there is no review to saturate', () => {
+    for (const s of [1.2, 3, 8]) {
+      expect(saturatedGain(0.6, s, 0)).toBeCloseTo(gain(0.6, s, 0), 10);
+    }
   });
 
-  it('shortens the affordable day as the drain rises', () => {
-    // The reason the diagram is worth drawing: capacity is not a constant in
-    // hours, only in units.
-    expect(heatBalance({ ...DEFAULTS, hours: 8 }).runaway).toBeLessThan(
-      heatBalance({ ...DEFAULTS, hours: 4 }).runaway,
-    );
+  it('produces no turnover at a narrow reach, and one at a wide reach', () => {
+    // The uncomfortable result: widening reach brings the turnover towards you,
+    // which is a caveat on this page's own advice.
+    expect(turnoverSpeed(0.6, 0.25)).toBeNull();
+    const wide = turnoverSpeed(0.9, 0.25);
+    expect(wide).not.toBeNull();
+    expect(wide!).toBeGreaterThan(1);
+  });
+
+  it('moves the turnover earlier as reach widens', () => {
+    const at80 = turnoverSpeed(0.8, 0.25)!;
+    const at95 = turnoverSpeed(0.95, 0.25)!;
+    expect(at95).toBeLessThan(at80);
+  });
+
+  it('can push the gain below 1 — slower than working alone', () => {
+    expect(saturatedGain(0.95, 200, 0.25)).toBeLessThan(1);
   });
 });
 

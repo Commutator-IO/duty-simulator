@@ -1,87 +1,140 @@
 import { useCopy } from '../content';
 import { SectionHead } from './Cards';
+import { Display, Latex } from './Latex';
 import {
-  BOUNDS,
-  SUSTAINABLE_LOAD,
+  SATURATION_K,
   damkohler,
-  heatBalance,
+  effectiveCeiling,
   limitingStep,
+  relativeTime,
+  saturatedGain,
   simulate,
+  turnoverSpeed,
   type Inputs,
 } from '../lib/model';
 
 /**
- * The model read as a reactor.
+ * The model read as a reaction, and as a loop.
  *
- * Three mappings do real work rather than decorating:
+ * This tab exists for the results that change what the instrument means, not
+ * for the ones that merely decorate it. Three do real work:
  *
- *  - Amdahl is the sum of resistances in series. Total time is the time in each
- *    step added together, so accelerating one step leaves the other untouched —
- *    which is why a better catalyst does nothing to a diffusion-limited
- *    reaction, and why a faster model does nothing to the meeting.
- *  - Review is a reverse rate proportional to the product already formed, which
- *    is exactly the shape of `r × (1 − t)`. At r = 1 forward and reverse match
- *    and the net advance is nil.
- *  - Fatigue is a heat balance. Generation rises with drain; removal capacity
- *    does not rise because you are busy. Where the two cross is not a metaphor,
- *    it is the threshold the instrument already computes.
+ *  - Damköhler names the limiting step, and therefore which fader to move.
+ *  - The closed-loop form explains why there is a second ceiling at all — the
+ *    one the instrument now shows — and where 1/r comes from.
+ *  - Saturation says the model is optimistic in a precise, correctable way, and
+ *    produces the one result here that argues against the page's own advice.
  *
- * The Damköhler number is the one addition: a ratio of two quantities the model
- * already has, which names the limiting step and therefore which fader to move.
+ * The heat balance that used to sit here has gone: it duplicated the battery
+ * and its crossing degenerated at the default hours.
  */
 
 const W = 640;
-const H = 300;
-const L = 52;
-const R = 18;
-const T = 20;
-const B = 42;
+const H = 280;
+const L = 46;
+const R = 16;
+const T = 18;
+const B = 40;
 
-/** An Erlenmeyer, filled to the load the day is actually drawing. */
-function Flask({ fill, hot }: { fill: number; hot: boolean }) {
-  const level = Math.max(0, Math.min(1, fill));
-  // The body runs from y=34 (neck) to y=92 (base); liquid rises from the base.
-  const top = 92 - level * 58;
+/** Gain against speed, with review constant and with review saturating. */
+function SaturationChart({ inputs }: { inputs: Inputs }) {
+  const copy = useCopy();
+  const c = copy.reactor.saturation;
+  const f = copy.format;
+
+  const sMax = 24;
+  const constant = (s: number) => 1 / (relativeTime(inputs.share, s) + inputs.review * (1 - relativeTime(inputs.share, s)));
+  const yMax = Math.max(effectiveCeiling(inputs.share, inputs.review), 1.2) * 1.12;
+
+  const x = (s: number) => L + ((s - 1) / (sMax - 1)) * (W - L - R);
+  const y = (v: number) => H - B - ((v - 1) / (yMax - 1)) * (H - T - B);
+
+  const trace = (fn: (s: number) => number) => {
+    const pts: string[] = [];
+    for (let i = 0; i <= 200; i++) {
+      const s = 1 + (i / 200) * (sMax - 1);
+      pts.push(`${i ? 'L' : 'M'}${x(s).toFixed(1)} ${y(Math.max(1, fn(s))).toFixed(1)}`);
+    }
+    return pts.join(' ');
+  };
+
+  const peak = turnoverSpeed(inputs.share, inputs.review);
 
   return (
-    <svg viewBox="0 0 80 104" className="h-[104px] w-20 shrink-0" aria-hidden="true">
-      <defs>
-        <clipPath id="flask-body">
-          <path d="M32 34 L12 88 Q10 94 18 94 L62 94 Q70 94 68 88 L48 34 Z" />
-        </clipPath>
-      </defs>
-      <rect
-        x="10"
-        y={top}
-        width="60"
-        height={94 - top}
-        clipPath="url(#flask-body)"
-        fill={hot ? 'var(--color-alert)' : 'var(--color-phosphor)'}
-        opacity="0.75"
-      />
-      <path
-        d="M32 34 L12 88 Q10 94 18 94 L62 94 Q70 94 68 88 L48 34 Z"
-        fill="none"
-        stroke="var(--color-muted)"
-        strokeWidth="2"
-      />
-      {/* Neck and ground-glass collar. */}
-      <path d="M32 34 V12 M48 34 V12" stroke="var(--color-muted)" strokeWidth="2" fill="none" />
-      <rect x="30" y="8" width="20" height="6" fill="var(--color-muted)" opacity="0.5" />
-      {/* Graduations. */}
-      {[0.25, 0.5, 0.75].map((g) => (
-        <line
-          key={g}
-          x1="20"
-          x2="30"
-          y1={92 - g * 58}
-          y2={92 - g * 58}
-          stroke="var(--color-muted)"
-          strokeWidth="1"
-          opacity="0.55"
-        />
-      ))}
-    </svg>
+    <>
+      <div className="border-rule bg-panel mt-6 border p-5">
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={c.alt}>
+          <line x1={L} y1={T} x2={L} y2={H - B} stroke="var(--color-rule)" />
+          <line x1={L} y1={H - B} x2={W - R} y2={H - B} stroke="var(--color-rule)" />
+
+          {/* Gain of 1: below this the tool is costing you time. */}
+          <line
+            x1={L}
+            y1={y(1)}
+            x2={W - R}
+            y2={y(1)}
+            stroke="var(--color-muted)"
+            strokeWidth={1}
+            strokeDasharray="2 4"
+          />
+
+          <path d={trace(constant)} fill="none" stroke="var(--color-slate)" strokeWidth={2.2} />
+          <path
+            d={trace((s) => saturatedGain(inputs.share, s, inputs.review))}
+            fill="none"
+            stroke="var(--color-brass)"
+            strokeWidth={2.6}
+          />
+
+          {peak !== null && (
+            <>
+              <line
+                x1={x(Math.min(peak, sMax))}
+                y1={T}
+                x2={x(Math.min(peak, sMax))}
+                y2={H - B}
+                stroke="var(--color-alert)"
+                strokeWidth={1.4}
+                strokeDasharray="5 4"
+              />
+              <text
+                x={x(Math.min(peak, sMax)) + 6}
+                y={T + 12}
+                fontFamily="var(--font-sans)"
+                fontSize="11"
+                fill="var(--color-alert)"
+              >
+                {c.turnoverMark}
+              </text>
+            </>
+          )}
+
+          <g fontFamily="var(--font-sans)" fontSize="11" fill="var(--color-muted)">
+            <text x={L} y={H - B + 16}>1×</text>
+            <text x={W - R} y={H - B + 16} textAnchor="end">{sMax}×</text>
+            <text x={(L + W - R) / 2} y={H - 8} textAnchor="middle">{c.xAxis}</text>
+            <text x={L - 6} y={y(1) + 4} textAnchor="end">1×</text>
+          </g>
+        </svg>
+      </div>
+
+      <ul className="caption mt-3 flex flex-wrap gap-x-6 gap-y-1.5">
+        <li className="flex items-center gap-2">
+          <i className="bg-slate inline-block h-0.5 w-4 shrink-0" />
+          {c.constantLine}
+        </li>
+        <li className="flex items-center gap-2">
+          <i className="bg-brass inline-block h-0.5 w-4 shrink-0" />
+          {c.saturatedLine}
+        </li>
+      </ul>
+
+      <p className="caption mt-3 max-w-[66ch]">
+        {peak === null
+          ? c.noTurnover(f.times(saturatedGain(inputs.share, 1e6, inputs.review)))
+          : c.turnover(f.timesShort(peak))}
+      </p>
+    </>
   );
 }
 
@@ -91,129 +144,83 @@ export function Reactor({ inputs }: { inputs: Inputs }) {
   const f = copy.format;
 
   const r = simulate(inputs);
-  const balance = heatBalance(inputs);
   const Da = damkohler(inputs.share, inputs.speed);
   const limiting = limitingStep(inputs.share, inputs.speed);
-
-  const dMin = BOUNDS.density.min;
-  const dMax = BOUNDS.density.max;
-  const yMax = Math.max(SUSTAINABLE_LOAD, inputs.hours * dMax, r.loadWithout) * 1.12;
-
-  const x = (d: number) => L + ((d - dMin) / (dMax - dMin)) * (W - L - R);
-  const y = (v: number) => H - B - (v / yMax) * (H - T - B);
-
-  const generation = `M${x(dMin)} ${y(inputs.hours * dMin)} L${x(dMax)} ${y(inputs.hours * dMax)}`;
-  const over = inputs.hours * inputs.density > SUSTAINABLE_LOAD;
+  const openLoop = 1 / relativeTime(inputs.share, inputs.speed);
 
   return (
     <>
       <section className="mt-11">
         <SectionHead designator={c.designator} title={c.title} sub={c.sub} />
-        {c.lead}
+        <div className="max-w-[63ch] [&_p]:mb-5">{c.lead}</div>
       </section>
 
-      {/* Which step limits — the readout that says what to do. */}
-      <div className="border-brass bg-panel mt-8 border border-l-[3px] px-5 py-4">
-        <p className="kicker mb-2">{c.damkohler.kicker}</p>
-        <p className="font-mono text-[30px] leading-none font-semibold">
-          Da = {f.index(Math.min(Da, 99))}
+      {/* 1 — which step limits */}
+      <section className="mt-12">
+        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.series.title}</h3>
+        <div className="max-w-[63ch] [&_p]:mb-5">{c.series.body}</div>
+
+        <div className="border-brass bg-panel mt-6 border border-l-[3px] px-5 py-4">
+          <p className="kicker mb-2">{c.damkohler.kicker}</p>
+          <p className="font-mono text-[30px] leading-none font-semibold">
+            Da = {f.index(Math.min(Da, 99))}
+          </p>
+          <p className="mt-3 text-[17px] leading-relaxed">
+            {limiting === 'reach' ? c.damkohler.reachLimited : c.damkohler.speedLimited}
+          </p>
+        </div>
+      </section>
+
+      {/* 2 — the loop, and where the second ceiling comes from */}
+      <section className="mt-14">
+        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.loop.title}</h3>
+        <div className="max-w-[63ch] [&_p]:mb-5">{c.loop.body}</div>
+
+        <Display name="closedLoop" />
+
+        <dl className="border-rule mt-6 grid gap-x-8 gap-y-3 border-t pt-4 text-[15px] sm:grid-cols-3">
+          {[
+            { t: c.loop.openLoop, v: f.times(openLoop) },
+            { t: c.loop.closedLoop, v: f.times(r.gain) },
+            { t: c.loop.feedbackCeiling, v: f.times(1 / inputs.review) },
+          ].map((i) => (
+            <div key={i.t}>
+              <dt className="caption">{i.t}</dt>
+              <dd className="font-mono tabular mt-0.5 text-[19px] font-semibold">{i.v}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="mt-6 max-w-[63ch] [&_p]:mb-5">{c.loop.consequence}</div>
+      </section>
+
+      {/* 3 — saturation: the model is optimistic, precisely here */}
+      <section className="mt-14">
+        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.saturation.title}</h3>
+        <div className="max-w-[63ch] [&_p]:mb-5">{c.saturation.body}</div>
+
+        <p className="bg-panel border-brass-soft my-5 overflow-x-auto border-l-2 px-3.5 py-3">
+          <Latex name="michaelis" />
         </p>
-        <p className="mt-3 text-[17px] leading-relaxed">
-          {limiting === 'reach' ? c.damkohler.reachLimited : c.damkohler.speedLimited}
-        </p>
-      </div>
 
-      <h3 className="kicker mt-11 mb-2">{c.balance.kicker}</h3>
+        <SaturationChart inputs={inputs} />
 
-      <div className="border-rule bg-panel flex items-center gap-5 border p-5">
-        <Flask fill={(inputs.hours * inputs.density) / SUSTAINABLE_LOAD} hot={over} />
+        <div className="mt-6 max-w-[63ch] [&_p]:mb-5">
+          {c.saturation.consequence(String(SATURATION_K))}
+        </div>
+      </section>
 
-        <svg viewBox={`0 0 ${W} ${H}`} className="min-w-0 flex-1" role="img" aria-label={c.balance.alt}>
-          {/* Region past the removal capacity. */}
-          <rect
-            x={L}
-            y={y(yMax)}
-            width={W - L - R}
-            height={y(SUSTAINABLE_LOAD) - y(yMax)}
-            fill="var(--color-alert)"
-            opacity="0.07"
-          />
+      {/* 4 — residence time: the quantitative case for blocks */}
+      <section className="mt-14">
+        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.residence.title}</h3>
+        <div className="max-w-[63ch] [&_p]:mb-5">{c.residence.body}</div>
+      </section>
 
-          {/* Axes. */}
-          <line x1={L} y1={T} x2={L} y2={H - B} stroke="var(--color-rule)" />
-          <line x1={L} y1={H - B} x2={W - R} y2={H - B} stroke="var(--color-rule)" />
-
-          {/* Removal capacity — flat, because the budget does not grow. */}
-          <line
-            x1={L}
-            y1={y(SUSTAINABLE_LOAD)}
-            x2={W - R}
-            y2={y(SUSTAINABLE_LOAD)}
-            stroke="var(--color-alert)"
-            strokeWidth={2}
-            strokeDasharray="7 5"
-          />
-          {/* The no-AI day, for comparison. */}
-          <line
-            x1={L}
-            y1={y(r.loadWithout)}
-            x2={W - R}
-            y2={y(r.loadWithout)}
-            stroke="var(--color-slate)"
-            strokeWidth={1.6}
-            strokeDasharray="3 5"
-          />
-          {/* Generation — rises with drain. */}
-          <path d={generation} fill="none" stroke="var(--color-brass)" strokeWidth={2.6} />
-
-          {/* Where you are. */}
-          <circle
-            cx={x(inputs.density)}
-            cy={y(inputs.hours * inputs.density)}
-            r={5.5}
-            fill={over ? 'var(--color-alert)' : 'var(--color-phosphor)'}
-            stroke="var(--color-paper)"
-            strokeWidth={1.5}
-          />
-
-          <g fontFamily="var(--font-sans)" fontSize="11" fill="var(--color-muted)">
-            <text x={L} y={H - B + 16}>
-              {f.index(dMin)}
-            </text>
-            <text x={W - R} y={H - B + 16} textAnchor="end">
-              {f.index(dMax)}
-            </text>
-            <text x={(L + W - R) / 2} y={H - 10} textAnchor="middle">
-              {c.balance.xAxis}
-            </text>
-            <text x={L - 6} y={y(SUSTAINABLE_LOAD) + 4} textAnchor="end" fill="var(--color-alert)">
-              {SUSTAINABLE_LOAD}
-            </text>
-            <text x={L - 6} y={y(r.loadWithout) + 4} textAnchor="end" fill="var(--color-slate)">
-              {f.units(r.loadWithout)}
-            </text>
-          </g>
-        </svg>
-      </div>
-
-      <ul className="caption mt-3 flex flex-wrap gap-x-6 gap-y-1.5">
-        {[
-          { c: 'var(--color-brass)', l: c.balance.generation },
-          { c: 'var(--color-alert)', l: c.balance.removal },
-          { c: 'var(--color-slate)', l: c.balance.withoutAi },
-        ].map((i) => (
-          <li key={i.l} className="flex items-center gap-2">
-            <i className="inline-block h-0.5 w-4 shrink-0" style={{ background: i.c }} />
-            {i.l}
-          </li>
-        ))}
-      </ul>
-
-      <p className="caption mt-3 max-w-[66ch]">
-        {c.balance.reading(f.index(balance.runaway), f.index(balance.breakEven))}
-      </p>
-
-      <div className="mt-12 max-w-[63ch] [&_p]:mb-5">{c.mappings}</div>
+      {/* 5 — where it stops */}
+      <section className="mt-14">
+        <h3 className="mb-3 text-[23px] font-bold tracking-[-0.01em]">{c.breaks.title}</h3>
+        <div className="max-w-[63ch] [&_p]:mb-5">{c.breaks.body}</div>
+      </section>
 
       <p className="caption border-rule mt-14 max-w-[68ch] border-t pt-5">{c.caveat}</p>
     </>

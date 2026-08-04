@@ -150,17 +150,30 @@ export type Copy = {
     title: string;
     sub: string;
     lead: ReactNode;
+    series: { title: string; body: ReactNode };
     damkohler: { kicker: string; reachLimited: ReactNode; speedLimited: ReactNode };
-    balance: {
-      kicker: string;
+    loop: {
+      title: string;
+      body: ReactNode;
+      openLoop: string;
+      closedLoop: string;
+      feedbackCeiling: string;
+      consequence: ReactNode;
+    };
+    saturation: {
+      title: string;
+      body: ReactNode;
       alt: string;
       xAxis: string;
-      generation: string;
-      removal: string;
-      withoutAi: string;
-      reading: (runaway: string, breakEven: string) => ReactNode;
+      constantLine: string;
+      saturatedLine: string;
+      turnoverMark: string;
+      turnover: (speed: string) => ReactNode;
+      noTurnover: (ceiling: string) => ReactNode;
+      consequence: (k: string) => ReactNode;
     };
-    mappings: ReactNode;
+    residence: { title: string; body: ReactNode };
+    breaks: { title: string; body: ReactNode };
     caveat: ReactNode;
   };
 

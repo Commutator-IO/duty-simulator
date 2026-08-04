@@ -213,28 +213,53 @@ export function limitingStep(share: number, speed: number): Limiting {
 }
 
 /**
- * The heat balance, in the model's own units.
+ * Review capacity is finite, and the model above pretends it is not.
  *
- * Generation rises with drain — a denser hour costs more, linearly here. Removal
- * is flat: the sustainable budget does not grow because you are busy. The two
- * crossings are the whole diagram, and they are the two thresholds the
- * instrument already computes.
+ * `r` is treated as a constant fraction, which says that checking twice as much
+ * output costs exactly twice as much — true only while you are nowhere near
+ * your own limit. Enzyme kinetics describes the other case: a fixed quantity of
+ * catalyst, throughput that saturates, and a queue that grows once substrate
+ * outruns it. Here you are the enzyme.
+ *
+ * `K` is the raw throughput at which review capacity is half-saturated. It is
+ * NOT calibrated — nothing measures it — so everything derived from it is an
+ * illustration of a shape, not a prediction. The shape itself is the point.
  */
-export type HeatBalance = {
-  /** Drain at which the shorter day costs as much as the long one. */
-  breakEven: number;
-  /** Drain at which the day stops being repeatable at all. */
-  runaway: number;
-  /** Where the reader is sitting. */
-  operating: number;
-};
+export const SATURATION_K = 4;
 
-export function heatBalance(inputs: Inputs): HeatBalance {
-  return {
-    breakEven: gain(inputs.share, inputs.speed, inputs.review),
-    runaway: SUSTAINABLE_LOAD / inputs.hours,
-    operating: inputs.density,
-  };
+export function saturatedGain(
+  share: number,
+  speed: number,
+  review: number,
+  k: number = SATURATION_K,
+): number {
+  const t = relativeTime(share, speed);
+  const raw = 1 / t;
+  return 1 / (t + review * (1 - t) * (1 + raw / k));
+}
+
+/**
+ * The speed past which more speed makes the day longer, if there is one.
+ *
+ * There is not always: while raw throughput stays small the correction only
+ * lowers the ceiling. A turnover appears once reach is wide enough to feed the
+ * bottleneck faster than it drains — which is Illich's threshold arriving from
+ * kinetics rather than from philosophy, and a real caveat on this page's own
+ * advice to widen reach.
+ */
+export function turnoverSpeed(
+  share: number,
+  review: number,
+  k: number = SATURATION_K,
+  max = 200,
+): number | null {
+  let best = { speed: 1, gain: 0 };
+  for (let s = 1; s <= max; s += 0.05) {
+    const g = saturatedGain(share, s, review, k);
+    if (g > best.gain) best = { speed: s, gain: g };
+  }
+  // A peak sitting on the far edge of the sweep is an asymptote, not a turnover.
+  return best.speed < max - 1 ? best.speed : null;
 }
 
 export type LoadVerdict = 'unsustainable' | 'heavier' | 'lighter';

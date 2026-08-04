@@ -540,13 +540,31 @@ export const FR: Copy = {
   reactor: {
     designator: 'Le réacteur',
     title: 'Le même modèle, lu comme une réaction',
-    sub: "Le génie chimique décrit cette forme depuis un siècle, sous d'autres noms. Trois de ses idées ne sont pas décoratives ici — c'est la même arithmétique, et l'une d'elles ajoute un chiffre qui vaut la peine.",
+    sub: "La cinétique chimique et l'automatique décrivent cette forme depuis un siècle, sous d'autres noms. Quatre de leurs résultats ne sont pas décoratifs ici : deux sont la même algèbre écrite autrement, un désigne le curseur à toucher, et le dernier dit que le modèle est optimiste d'une façon qu'on peut montrer du doigt.",
     lead: (
-      <p className="mb-5 max-w-[62ch]">
-        Rien de ce qui suit ne change le modèle. Cela change ce qu'on y voit, et cela donne à la
-        page ce qui lui manquait : un seul chiffre qui dit quel curseur toucher.
+      <p>
+        Rien ici ne change l'arithmétique des autres onglets. Ce que ça change, c'est ce qu'on y
+        voit — dont un résultat qui contredit le conseil que cette page donne.
       </p>
     ),
+    series: {
+      title: 'Des résistances en série',
+      body: (
+        <>
+          <p>
+            La formule d'Amdahl est une somme de temps de séjour : quantité sur vitesse, par étape,
+            additionnées. C'est l'algèbre de l'addition des résistances, et elle donne la conclusion
+            que les chimistes tirent de la diffusion et de la réaction — si le transport limite, un
+            meilleur catalyseur n'achète rigoureusement rien.
+          </p>
+          <p>
+            L'outil se comporte en catalyseur au sens strict : il abaisse la barrière des étapes
+            qu'il touche, laisse les autres tranquilles, et ne déplace pas l'équilibre. Il y mène
+            seulement plus tôt.
+          </p>
+        </>
+      ),
+    },
     damkohler: {
       kicker: 'Quelle étape limite',
       reachLimited: (
@@ -566,70 +584,143 @@ export const FR: Copy = {
         </>
       ),
     },
-    balance: {
-      kicker: 'Le bilan thermique',
-      alt: "Charge produite contre capacité d'évacuation, à mesure que la fatigue monte.",
-      xAxis: 'Ce que coûte une heure',
-      generation: 'Produit : heures × fatigue',
-      removal: "Capacité d'évacuation : le budget tenable",
-      withoutAi: 'Ce que la même journée coûtait sans outil',
-      reading: (runaway, breakEven) => (
+    loop: {
+      title: "Une boucle de retour, et d'où vient le second plafond",
+      body: (
         <>
-          <strong className="text-ink font-semibold">Comment le lire.</strong> La droite montante
-          est ce que votre journée produit ; la rouge horizontale est ce que vous pouvez évacuer, et
-          elle ne monte pas sous prétexte que vous êtes occupé. Elles se croisent à une fatigue de{' '}
-          {runaway} — au-delà, la journée cesse d'être répétable. La bleue croise à {breakEven}, où
-          la journée courte commence à coûter plus que la longue. Le premier croisement atteint est
-          votre vraie limite, et à bien des réglages c'est le rouge.
+          <p>
+            La vérification mesure la sortie et en réinjecte une part sous forme de travail à
+            refaire. C'est une boucle de rétroaction négative, et écrire le modèle dans la notation
+            de la boucle n'est pas une analogie — les deux expressions sont identiques.
+          </p>
+        </>
+      ),
+      openLoop: 'Boucle ouverte, avant relecture',
+      closedLoop: 'Boucle fermée, ce que vous obtenez',
+      feedbackCeiling: 'Limite de la boucle, 1/r',
+      consequence: (
+        <>
+          <p>
+            D'où le résultat central de l'asservissement : dès que le gain direct est grand, le gain
+            en boucle fermée cesse d'en dépendre et n'est plus fixé que par la chaîne de retour.
+            Poussez l'assistant aussi loin que vous voulez, vous convergez vers 1/r — un plafond qui
+            n'a rien à voir avec Amdahl, et la raison pour laquelle l'instrument affiche désormais
+            deux limites au lieu d'une.
+          </p>
+          <p>
+            Deux bornes indépendantes sur la même grandeur, et c'est la plus petite qui vous
+            gouverne. À forte portée, c'est celle-ci.
+          </p>
         </>
       ),
     },
-    mappings: (
-      <>
-        <h3 className="mb-3 text-[21px] font-bold">Des résistances en série</h3>
-        <p>
-          La formule d'Amdahl est une somme de temps de séjour : quantité sur vitesse, pour chaque
-          étape, additionnées. C'est l'algèbre de l'addition des résistances, et elle donne la
-          conclusion que les chimistes tirent de la diffusion et de la réaction — si le transport
-          limite, un meilleur catalyseur n'achète rien. La réunion est l'étape de diffusion.
-        </p>
-        <p>
-          L'outil se comporte d'ailleurs comme un catalyseur au sens strict : il abaisse la barrière
-          des étapes qu'il touche, laisse les autres tranquilles, et — à retenir — un catalyseur ne
-          déplace pas l'équilibre. Il y mène seulement plus tôt.
-        </p>
-
-        <h3 className="mt-8 mb-3 text-[21px] font-bold">Une vitesse inverse</h3>
-        <p>
-          Le terme de vérification vaut <em>r × (1 − t)</em> : proportionnel à l'avancement déjà
-          obtenu. C'est la forme d'une vitesse inverse proportionnelle à la concentration en produit
-          — plus vous avez produit, plus il y a à reconvertir. À r = 1, directe et inverse se
-          compensent exactement et l'avancement net est nul, ce qui est un équilibre au sens
-          chimique ordinaire.
-        </p>
-
-        <h3 className="mt-8 mb-3 text-[21px] font-bold">Où l'analogie s'arrête</h3>
-        <p>
-          L'effet cliquet a un cousin chimique — l'autocatalyse, où le produit catalyse sa propre
-          formation — mais la ressemblance s'arrête au mécanisme. Une réaction autocatalytique
-          s'arrête, parce qu'elle épuise son substrat ; la conservation de la matière lui met une
-          borne. Les attentes ne sont faites de rien et n'ont pas cette borne.
-        </p>
-        <p>
-          Le Chatelier est le contraste le plus net. Un système à l'équilibre répond à une
-          contrainte en s'y opposant. Le cliquet, lui, répond en la renforçant. C'est pour cela
-          qu'aucune loi de la thermodynamique ne figure dans les sources, et que Roy et Gustafson y
-          sont.
-        </p>
-      </>
-    ),
+    saturation: {
+      title: 'Votre capacité de relecture est finie, et le modèle fait comme si elle ne l\'était pas',
+      body: (
+        <>
+          <p>
+            Traiter <em>r</em> comme une fraction constante revient à dire que relire deux fois plus
+            de sorties coûte exactement deux fois plus. Ce n'est vrai que tant qu'on est loin de sa
+            propre limite.
+          </p>
+          <p>
+            La cinétique enzymatique décrit l'autre cas : une quantité fixe de catalyseur, un débit
+            qui sature, une file d'attente qui grossit dès que le substrat le dépasse. Ici{' '}
+            <strong>c'est vous l'enzyme</strong>, et c'est cela — plutôt que Brooks et la
+            coordination — qui explique que trois sessions d'agent ne triplent rien.
+          </p>
+        </>
+      ),
+      alt: 'Gain en fonction de la vitesse, à vérification constante puis saturante.',
+      xAxis: 'Accélération sur la part assistée',
+      constantLine: "Vérification à fraction constante — ce que l'instrument calcule",
+      saturatedLine: 'Vérification qui sature',
+      turnoverMark: 'retournement',
+      turnover: (speed) => (
+        <>
+          <strong className="text-ink font-semibold">À votre portée, il y a un retournement.</strong>{' '}
+          La courbe corrigée culmine vers {speed} puis redescend : au-delà, un assistant plus rapide
+          rend votre journée <em>plus longue</em>, parce qu'il alimente un goulot qui ne se vide pas
+          plus vite. C'est le seuil de contre-productivité d'Illich, obtenu par la cinétique au lieu
+          de la philosophie.
+        </>
+      ),
+      noTurnover: (ceiling) => (
+        <>
+          <strong className="text-ink font-semibold">À votre portée, pas de retournement</strong> —
+          le débit brut ne devient jamais assez grand pour noyer le goulot. La saturation ne fait
+          qu'abaisser le plafond, à environ {ceiling}. Élargissez la portée et un retournement
+          apparaît.
+        </>
+      ),
+      consequence: (k) => (
+        <>
+          <p>
+            <strong className="text-ink font-semibold">À lire comme une forme, pas comme une mesure.</strong>{' '}
+            K — le débit auquel la capacité de relecture est à demi-saturée — vaut {k} ici et rien ne
+            l'étalonne. Personne n'a mesuré le vôtre.
+          </p>
+          <p>
+            La forme, elle, est gênante : plus la portée est large, plus tôt la vitesse
+            supplémentaire commence à nuire. Cette page consacre tout un pas-à-pas à défendre que la
+            portée est le terme qui a du levier. La saturation est la réserve — élargir ce que
+            l'outil touche sans élever ce que vous pouvez absorber rapproche le retournement de vous.
+          </p>
+        </>
+      ),
+    },
+    residence: {
+      title: 'Le temps de séjour, et la défense des blocs ininterrompus',
+      body: (
+        <>
+          <p>
+            Deux réacteurs de même volume ne donnent pas la même conversion. Le réacteur piston — où
+            tout entre et sort dans l'ordre — bat le réacteur parfaitement agité, dans lequel une
+            partie court-circuite et une autre stagne.
+          </p>
+          <p>
+            Un bloc de concentration protégé est un piston. Un après-midi en open space avec Slack
+            ouvert est la cuve agitée : mêmes heures en entrée, moins bonne conversion en sortie, et
+            c'est le rétromélange qui vous coûte, pas les interruptions elles-mêmes.
+          </p>
+          <p>
+            C'est l'argument quantitatif de l'onglet « En pratique », et il est plus solide que de
+            dire que changer de contexte, c'est mal.
+          </p>
+        </>
+      ),
+    },
+    breaks: {
+      title: "Où l'analogie s'arrête",
+      body: (
+        <>
+          <p>
+            L'effet cliquet a un cousin chimique — l'autocatalyse, où le produit catalyse sa propre
+            formation. Le mécanisme correspond ; le comportement, non. Une réaction autocatalytique
+            s'arrête, parce qu'elle épuise son substrat, et la conservation de la matière lui met une
+            borne. Les attentes ne sont faites de rien et n'ont pas cette borne.
+          </p>
+          <p>
+            L'automatique le nomme mieux : les attentes se comportent comme un intégrateur sans
+            fuite. Un pôle à l'origine, tout s'accumule, rien ne décroît. Et Le Chatelier est le
+            contraste net — un système à l'équilibre répond à une contrainte en s'y opposant, quand
+            le cliquet répond en la renforçant.
+          </p>
+          <p>
+            Un dernier emprunt qui mérite son nom : Goodhart est le défaut classique de
+            l'asservissement du capteur au lieu de la grandeur. L'affichage est parfait pendant que
+            la chose qu'il représentait dérive.
+          </p>
+        </>
+      ),
+    },
     caveat: (
       <>
-        Une hypothèse dite franchement : ce modèle est d'ordre zéro — le temps vaut quantité sur
-        vitesse, et la vitesse ne dépend pas de ce qu'il reste. Le travail intellectuel réel est
-        plus proche de l'ordre un, ce qui est l'affaire bien connue du dernier dixième qui prend
+        Une hypothèse dite franchement : le modèle est d'ordre zéro — le temps vaut quantité sur
+        vitesse, et la vitesse ne dépend pas de ce qu'il reste. Le travail intellectuel réel est plus
+        proche de l'ordre un, ce qui est l'affaire bien connue du dernier dixième qui prend
         l'essentiel du temps. Amdahl est optimiste sur la fin des tâches, et tout ce qui est bâti
-        dessus ici l'est aussi.
+        dessus en hérite.
       </>
     ),
   },

@@ -55,6 +55,17 @@ export const FORMULAS = {
   /** Little, in its usual letters. */
   little: String.raw`L = \lambda\,W`,
 
+  /**
+   * The review term written as a feedback loop, with A the open-loop gain.
+   * Algebraically identical to the model — and the reason a second ceiling
+   * exists, since it tends to 1/r as A grows.
+   */
+  closedLoop: String.raw`\mathrm{gain} = \dfrac{A}{1 - r + rA}
+    \qquad \lim\limits_{A \to \infty} \mathrm{gain} = \dfrac{1}{r}`,
+
+  /** Review capacity saturating, in the Michaelis-Menten shape. */
+  michaelis: String.raw`t_{\mathrm{eff}} = t + r\,(1-t)\left(1 + \dfrac{A}{K}\right)`,
+
   /** The ratchet: what the surplus becomes once it has been shown. */
   ratchet: String.raw`\mathrm{visible} = 1 + v\,(\mathrm{gain} - 1)`,
 } as const satisfies Record<string, string>;
