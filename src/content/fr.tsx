@@ -298,6 +298,7 @@ export const FR: Copy = {
     tabs: {
       walkthrough: 'Pas à pas',
       simulator: "L'instrument",
+      reactor: 'Le réacteur',
       macos: 'En pratique',
       foundations: 'Les sources',
     },
@@ -534,6 +535,103 @@ export const FR: Copy = {
           return `La barre monte de ${rise}, et elle ne redescendra pas. Il vous reste ${f.hours(result.marginKept)} en heures d'avant — à dépenser de préférence dans quelque chose qui n'apparaîtra jamais sur un tableau de bord : de la fiabilité, une lacune à combler, ou du repos.`;
       }
     },
+  },
+
+  reactor: {
+    designator: 'Le réacteur',
+    title: 'Le même modèle, lu comme une réaction',
+    sub: "Le génie chimique décrit cette forme depuis un siècle, sous d'autres noms. Trois de ses idées ne sont pas décoratives ici — c'est la même arithmétique, et l'une d'elles ajoute un chiffre qui vaut la peine.",
+    lead: (
+      <p className="mb-5 max-w-[62ch]">
+        Rien de ce qui suit ne change le modèle. Cela change ce qu'on y voit, et cela donne à la
+        page ce qui lui manquait : un seul chiffre qui dit quel curseur toucher.
+      </p>
+    ),
+    damkohler: {
+      kicker: 'Quelle étape limite',
+      reachLimited: (
+        <>
+          En dessous de 1 :{' '}
+          <strong className="font-semibold">l'étape que l'outil ne touche pas domine.</strong> Vous
+          êtes limité par le transport, et un modèle plus rapide est un meilleur catalyseur sur une
+          réaction qui attend déjà autre chose. Élargir la portée est le seul geste qui paie.
+        </>
+      ),
+      speedLimited: (
+        <>
+          Au-dessus de 1 :{' '}
+          <strong className="font-semibold">l'outil est encore le goulot.</strong> L'étape accélérée
+          prend plus de temps que tout le reste réuni, donc la vitesse vaut réellement d'être
+          achetée — jusqu'à ce que ce chiffre repasse sous 1, ce qui arrivera.
+        </>
+      ),
+    },
+    balance: {
+      kicker: 'Le bilan thermique',
+      alt: "Charge produite contre capacité d'évacuation, à mesure que la fatigue monte.",
+      xAxis: 'Ce que coûte une heure',
+      generation: 'Produit : heures × fatigue',
+      removal: "Capacité d'évacuation : le budget tenable",
+      withoutAi: 'Ce que la même journée coûtait sans outil',
+      reading: (runaway, breakEven) => (
+        <>
+          <strong className="text-ink font-semibold">Comment le lire.</strong> La droite montante
+          est ce que votre journée produit ; la rouge horizontale est ce que vous pouvez évacuer, et
+          elle ne monte pas sous prétexte que vous êtes occupé. Elles se croisent à une fatigue de{' '}
+          {runaway} — au-delà, la journée cesse d'être répétable. La bleue croise à {breakEven}, où
+          la journée courte commence à coûter plus que la longue. Le premier croisement atteint est
+          votre vraie limite, et à bien des réglages c'est le rouge.
+        </>
+      ),
+    },
+    mappings: (
+      <>
+        <h3 className="mb-3 text-[21px] font-bold">Des résistances en série</h3>
+        <p>
+          La formule d'Amdahl est une somme de temps de séjour : quantité sur vitesse, pour chaque
+          étape, additionnées. C'est l'algèbre de l'addition des résistances, et elle donne la
+          conclusion que les chimistes tirent de la diffusion et de la réaction — si le transport
+          limite, un meilleur catalyseur n'achète rien. La réunion est l'étape de diffusion.
+        </p>
+        <p>
+          L'outil se comporte d'ailleurs comme un catalyseur au sens strict : il abaisse la barrière
+          des étapes qu'il touche, laisse les autres tranquilles, et — à retenir — un catalyseur ne
+          déplace pas l'équilibre. Il y mène seulement plus tôt.
+        </p>
+
+        <h3 className="mt-8 mb-3 text-[21px] font-bold">Une vitesse inverse</h3>
+        <p>
+          Le terme de vérification vaut <em>r × (1 − t)</em> : proportionnel à l'avancement déjà
+          obtenu. C'est la forme d'une vitesse inverse proportionnelle à la concentration en produit
+          — plus vous avez produit, plus il y a à reconvertir. À r = 1, directe et inverse se
+          compensent exactement et l'avancement net est nul, ce qui est un équilibre au sens
+          chimique ordinaire.
+        </p>
+
+        <h3 className="mt-8 mb-3 text-[21px] font-bold">Où l'analogie s'arrête</h3>
+        <p>
+          L'effet cliquet a un cousin chimique — l'autocatalyse, où le produit catalyse sa propre
+          formation — mais la ressemblance s'arrête au mécanisme. Une réaction autocatalytique
+          s'arrête, parce qu'elle épuise son substrat ; la conservation de la matière lui met une
+          borne. Les attentes ne sont faites de rien et n'ont pas cette borne.
+        </p>
+        <p>
+          Le Chatelier est le contraste le plus net. Un système à l'équilibre répond à une
+          contrainte en s'y opposant. Le cliquet, lui, répond en la renforçant. C'est pour cela
+          qu'aucune loi de la thermodynamique ne figure dans les sources, et que Roy et Gustafson y
+          sont.
+        </p>
+      </>
+    ),
+    caveat: (
+      <>
+        Une hypothèse dite franchement : ce modèle est d'ordre zéro — le temps vaut quantité sur
+        vitesse, et la vitesse ne dépend pas de ce qu'il reste. Le travail intellectuel réel est
+        plus proche de l'ordre un, ce qui est l'affaire bien connue du dernier dixième qui prend
+        l'essentiel du temps. Amdahl est optimiste sur la fin des tâches, et tout ce qui est bâti
+        dessus ici l'est aussi.
+      </>
+    ),
   },
 
   battery: {

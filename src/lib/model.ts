@@ -189,6 +189,54 @@ export function battery(inputs: Inputs): Battery {
   };
 }
 
+/**
+ * Which step is limiting, read the way a chemical engineer reads a reactor.
+ *
+ * Damköhler compares the time spent in the accelerated step against the time
+ * spent in the one the tool cannot touch. Below 1 the untouched step dominates
+ * and making the tool faster changes almost nothing — you are transport-limited,
+ * and the only move is to widen what it reaches. Above 1 the tool is still the
+ * bottleneck and speed is worth buying.
+ *
+ * It is a ratio of two numbers the model already has, and it answers the only
+ * question a reader actually leaves with: which fader do I touch?
+ */
+export function damkohler(share: number, speed: number): number {
+  if (share >= 1) return Number.POSITIVE_INFINITY;
+  return share / speed / (1 - share);
+}
+
+export type Limiting = 'reach' | 'speed';
+
+export function limitingStep(share: number, speed: number): Limiting {
+  return damkohler(share, speed) < 1 ? 'reach' : 'speed';
+}
+
+/**
+ * The heat balance, in the model's own units.
+ *
+ * Generation rises with drain — a denser hour costs more, linearly here. Removal
+ * is flat: the sustainable budget does not grow because you are busy. The two
+ * crossings are the whole diagram, and they are the two thresholds the
+ * instrument already computes.
+ */
+export type HeatBalance = {
+  /** Drain at which the shorter day costs as much as the long one. */
+  breakEven: number;
+  /** Drain at which the day stops being repeatable at all. */
+  runaway: number;
+  /** Where the reader is sitting. */
+  operating: number;
+};
+
+export function heatBalance(inputs: Inputs): HeatBalance {
+  return {
+    breakEven: gain(inputs.share, inputs.speed, inputs.review),
+    runaway: SUSTAINABLE_LOAD / inputs.hours,
+    operating: inputs.density,
+  };
+}
+
 export type LoadVerdict = 'unsustainable' | 'heavier' | 'lighter';
 
 /**

@@ -274,6 +274,7 @@ export const EN: Copy = {
     tabs: {
       walkthrough: 'Start here',
       simulator: 'The instrument',
+      reactor: 'The reactor',
       macos: 'What to change',
       foundations: 'The research',
     },
@@ -504,6 +505,98 @@ export const EN: Copy = {
           return `The bar goes up ${rise}, and it will not come back down. What is left to you is ${f.hours(result.marginKept)} in old-money hours — best spent on something that never appears on a dashboard: reliability, a gap in what you know, or rest.`;
       }
     },
+  },
+
+  reactor: {
+    designator: 'The reactor',
+    title: 'The same model, read as a reaction',
+    sub: 'Chemical engineering has been describing this shape for a century, under other names. Three of its ideas are not decoration here — they are the same arithmetic, and one of them adds a number worth having.',
+    lead: (
+      <p className="mb-5 max-w-[62ch]">
+        None of what follows changes the model. It changes what you can see in it, and it gives the
+        page the one thing it was missing: a single figure that says which fader to touch.
+      </p>
+    ),
+    damkohler: {
+      kicker: 'Which step is limiting',
+      reachLimited: (
+        <>
+          Below 1: <strong className="font-semibold">the step the tool cannot touch dominates.</strong>{' '}
+          You are transport-limited, and a faster model is a better catalyst on a reaction that is
+          already waiting for something else. Widening reach is the only move that pays.
+        </>
+      ),
+      speedLimited: (
+        <>
+          Above 1: <strong className="font-semibold">the tool is still the bottleneck.</strong> The
+          accelerated step is taking longer than everything else put together, so speed is genuinely
+          worth buying — until this number crosses back under 1, which it will.
+        </>
+      ),
+    },
+    balance: {
+      kicker: 'The heat balance',
+      alt: 'Load generated against removal capacity, as drain rises.',
+      xAxis: 'How draining an hour is',
+      generation: 'Generated: hours × drain',
+      removal: 'Removal capacity: the sustainable budget',
+      withoutAi: 'What the same day cost without the tool',
+      reading: (runaway, breakEven) => (
+        <>
+          <strong className="text-ink font-semibold">Reading it.</strong> The rising line is what
+          your day generates; the flat red one is what you can carry away, and it does not rise
+          because you are busy. They cross at a drain of {runaway} — past that the day stops being
+          repeatable. The blue line crosses at {breakEven}, which is where the short day starts
+          costing more than the long one. Whichever crossing comes first is your real limit, and on
+          many settings it is the red one.
+        </>
+      ),
+    },
+    mappings: (
+      <>
+        <h3 className="mb-3 text-[21px] font-bold">Resistances in series</h3>
+        <p>
+          Amdahl's formula is a sum of residence times: amount over rate, for each step, added
+          together. That is the same algebra as adding resistances, and it produces the same
+          conclusion chemical engineers reach about diffusion and reaction — if transport is
+          limiting, a better catalyst buys nothing. The meeting is the diffusion step.
+        </p>
+        <p>
+          The tool behaves like a catalyst in the strict sense too: it lowers the barrier on the
+          steps it touches, leaves the others alone, and — worth remembering — a catalyst does not
+          move the equilibrium. It only gets you there sooner.
+        </p>
+
+        <h3 className="mt-8 mb-3 text-[21px] font-bold">A reverse rate</h3>
+        <p>
+          The review term is <em>r × (1 − t)</em>: proportional to the advance already made. That is
+          the shape of a reverse rate proportional to product concentration — the more you have
+          produced, the more there is to convert back. At r = 1 forward and reverse match exactly
+          and the net advance is nil, which is an equilibrium in the ordinary chemical sense.
+        </p>
+
+        <h3 className="mt-8 mb-3 text-[21px] font-bold">Where the analogy stops</h3>
+        <p>
+          The ratchet has a chemical cousin — autocatalysis, where the product catalyses its own
+          formation — but the resemblance ends at the mechanism. An autocatalytic reaction stops,
+          because it runs out of substrate; conservation of mass puts a bound on it. Expectations
+          are not made of anything and have no such bound.
+        </p>
+        <p>
+          Le Chatelier is the sharper contrast. A system at equilibrium responds to a constraint by
+          opposing it. The ratchet responds by reinforcing it. That is why no law of thermodynamics
+          appears among the sources, and Roy and Gustafson do.
+        </p>
+      </>
+    ),
+    caveat: (
+      <>
+        One assumption stated plainly: this model is zero-order — time is amount over rate, and the
+        rate does not depend on how much is left. Real intellectual work is closer to first-order,
+        which is the familiar business of the last tenth taking most of the time. Amdahl is
+        optimistic about finishing, and so is everything built on it here.
+      </>
+    ),
   },
 
   battery: {

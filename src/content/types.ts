@@ -145,6 +145,25 @@ export type Copy = {
     ratchet: (result: Result, inputs: Inputs) => string;
   };
 
+  reactor: {
+    designator: string;
+    title: string;
+    sub: string;
+    lead: ReactNode;
+    damkohler: { kicker: string; reachLimited: ReactNode; speedLimited: ReactNode };
+    balance: {
+      kicker: string;
+      alt: string;
+      xAxis: string;
+      generation: string;
+      removal: string;
+      withoutAi: string;
+      reading: (runaway: string, breakEven: string) => ReactNode;
+    };
+    mappings: ReactNode;
+    caveat: ReactNode;
+  };
+
   battery: {
     kicker: string;
     /** Printed across the cell once it is flat. */

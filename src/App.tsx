@@ -4,6 +4,7 @@ import { Footer, Masthead, Panel, Tabs } from './components/Frame';
 import { Foundations } from './components/Foundations';
 import { MacosSettings } from './components/MacosSettings';
 import { ShareButton } from './components/ShareButton';
+import { Reactor } from './components/Reactor';
 import { Simulator } from './components/Simulator';
 import { Walkthrough } from './components/Walkthrough';
 import { CopyProvider, COPY } from './content';
@@ -92,6 +93,10 @@ export default function App() {
         <div className="mt-8">
           <ShareButton link={shareLink(inputs, tab, chosen)} />
         </div>
+      </Panel>
+
+      <Panel tab="reactor" current={tab}>
+        <Reactor inputs={inputs} />
       </Panel>
 
       <Panel tab="macos" current={tab}>

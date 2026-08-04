@@ -17,9 +17,15 @@ import { BOUNDS, DEFAULTS, clamp, type Inputs } from './model';
  *    the slider cannot represent.
  */
 
-export type Tab = 'walkthrough' | 'simulator' | 'macos' | 'foundations';
+export type Tab = 'walkthrough' | 'simulator' | 'reactor' | 'macos' | 'foundations';
 
-export const TABS: readonly Tab[] = ['walkthrough', 'simulator', 'macos', 'foundations'];
+export const TABS: readonly Tab[] = [
+  'walkthrough',
+  'simulator',
+  'reactor',
+  'macos',
+  'foundations',
+];
 
 /**
  * The walkthrough, not the console. Somebody arriving cold cannot read a desk

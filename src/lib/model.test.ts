@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
   BOUNDS,
   battery,
+  damkohler,
   effectiveCeiling,
+  limitingStep,
   DEFAULTS,
   breakEvenDensity,
   ceiling,
@@ -13,6 +15,7 @@ import {
   ratchetVerdict,
   relativeTime,
   SUSTAINABLE_LOAD,
+  heatBalance,
   simulate,
 } from './model';
 
@@ -201,6 +204,48 @@ describe('the battery', () => {
       const b = battery(inputs);
       expect(b.charge).toBeCloseTo(1 - simulate(inputs).loadWith / SUSTAINABLE_LOAD, 10);
     }
+  });
+});
+
+describe('Damköhler', () => {
+  it('compares the two steps, and is below 1 when the untouched one dominates', () => {
+    // Defaults: 0.2 of the day accelerated against 0.4 that cannot be.
+    expect(damkohler(0.6, 3)).toBeCloseTo(0.5, 6);
+    expect(limitingStep(0.6, 3)).toBe('reach');
+  });
+
+  it('names speed as limiting only while the tool still costs more than the rest', () => {
+    expect(limitingStep(0.85, 3)).toBe('speed');
+    expect(damkohler(0.85, 3)).toBeGreaterThan(1);
+  });
+
+  it('falls as the tool gets faster, so speed buys its own irrelevance', () => {
+    let previous = Infinity;
+    for (const s of [1.2, 2, 3, 5, 8]) {
+      const now = damkohler(0.6, s);
+      expect(now).toBeLessThan(previous);
+      previous = now;
+    }
+  });
+});
+
+describe('the heat balance', () => {
+  it('puts the runaway crossing where the load meets the budget', () => {
+    const h = heatBalance(DEFAULTS);
+    expect(DEFAULTS.hours * h.runaway).toBeCloseTo(SUSTAINABLE_LOAD, 10);
+  });
+
+  it('puts the break-even crossing at the gain, as the instrument does', () => {
+    const h = heatBalance(DEFAULTS);
+    expect(h.breakEven).toBeCloseTo(simulate(DEFAULTS).gain, 10);
+  });
+
+  it('shortens the affordable day as the drain rises', () => {
+    // The reason the diagram is worth drawing: capacity is not a constant in
+    // hours, only in units.
+    expect(heatBalance({ ...DEFAULTS, hours: 8 }).runaway).toBeLessThan(
+      heatBalance({ ...DEFAULTS, hours: 4 }).runaway,
+    );
   });
 });
 
