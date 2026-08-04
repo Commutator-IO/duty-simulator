@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   BOUNDS,
+  effectiveCeiling,
   DEFAULTS,
   breakEvenDensity,
   ceiling,
@@ -45,6 +46,45 @@ describe('Amdahl', () => {
   it('rises with speed and with share', () => {
     expect(gain(0.6, 4, 0)).toBeGreaterThan(gain(0.6, 3, 0));
     expect(gain(0.7, 3, 0)).toBeGreaterThan(gain(0.6, 3, 0));
+  });
+});
+
+describe('the ceiling that actually binds', () => {
+  // The bug this guards: the page displayed 1/(1−p) as "where an infinitely
+  // fast tool would stop". With review, an infinitely fast tool stops well
+  // short of it — by 38% on the defaults, and by 3.6× at p=0.9, r=0.4.
+  it('is exactly where the gain lands at unbounded speed', () => {
+    for (const [p, r] of [
+      [0.6, 0.25],
+      [0.8, 0.25],
+      [0.9, 0.4],
+      [0.1, 0.6],
+    ]) {
+      expect(gain(p, 1e12, r)).toBeCloseTo(effectiveCeiling(p, r), 6);
+    }
+  });
+
+  it('sits at or below the Amdahl limit, and equals it only when review is free', () => {
+    for (const p of [0.1, 0.5, 0.95]) {
+      expect(effectiveCeiling(p, 0)).toBeCloseTo(ceiling(p), 10);
+      for (const r of [0.05, 0.25, 0.6]) {
+        expect(effectiveCeiling(p, r)).toBeLessThan(ceiling(p));
+      }
+    }
+  });
+
+  it('tends to 1/r as the share approaches everything — the feedback limit', () => {
+    // With a large forward gain the closed-loop gain is set by the feedback
+    // path alone, which here is the review fraction.
+    expect(effectiveCeiling(0.999999, 0.25)).toBeCloseTo(1 / 0.25, 3);
+    expect(effectiveCeiling(0.999999, 0.5)).toBeCloseTo(1 / 0.5, 3);
+  });
+
+  it('is never beaten by the gain at any reachable speed', () => {
+    for (const s of [1, 1.2, 3, 8, 1000]) {
+      const r = simulate({ ...DEFAULTS, speed: s });
+      expect(r.gain).toBeLessThanOrEqual(r.effectiveCeiling + 1e-12);
+    }
   });
 });
 

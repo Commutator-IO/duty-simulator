@@ -108,10 +108,10 @@ function steps(v: WalkthroughValues, set: (patch: Partial<Inputs>) => void): Ste
             room are what hold this number down — not the model.
           </Ask>
           <Tally>
-            At <Live>{f.percent(inputs.share)}</Live>, your ceiling is{' '}
-            <Live>{f.times(r.ceiling)}</Live>. That is where you land with an{' '}
-            <em>infinitely fast</em> assistant — not ten times faster, infinitely. No release will
-            ever take you past it while this number stays put.
+            At <Live>{f.percent(inputs.share)}</Live>, Amdahl alone would cap you at{' '}
+            <Live>{f.times(r.ceiling)}</Live> — where you land with an <em>infinitely fast</em>{' '}
+            assistant, not ten times faster but infinitely. Checking will pull that down again in
+            two questions' time. No release ever takes you past it while this number stays put.
           </Tally>
         </>
       ),
@@ -437,7 +437,7 @@ export const EN: Copy = {
     },
     metrics: {
       gain: ['What you actually gain', 'After the checking is paid for'],
-      ceiling: ['The hard ceiling', 'Where an infinitely fast tool would stop'],
+      ceiling: ['The hard ceiling', 'Where an infinitely fast tool stops, checking included'],
       without: ['The same day, without AI', 'To produce what you produce now'],
       gap: ['Extra strain', 'Positive means the shorter day costs more'],
       baseline: ['The new normal', 'What is expected of you from now on'],
@@ -477,7 +477,9 @@ export const EN: Copy = {
       'Overall gain against tool speed-up, at a constant accelerated share. The trace flattens as speed rises and never reaches the ceiling set by the share.',
     ch1: 'Review deducted',
     ch2: 'Theoretical Amdahl',
-    limit: 'Ceiling, infinite speed',
+    limit: 'Your ceiling, infinite speed',
+    limitShort: 'CEILING',
+    limitTheoretical: 'Amdahl limit, if review were free',
   },
 
   verdicts: {

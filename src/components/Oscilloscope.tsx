@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useCopy } from '../content';
-import { BOUNDS, ceiling, gain, relativeTime } from '../lib/model';
+import { BOUNDS, ceiling, effectiveCeiling, gain, relativeTime } from '../lib/model';
 
 const W = 640;
 const H = 300;
@@ -65,9 +65,19 @@ export function Oscilloscope({
   const [ref, shrink] = useShrink();
 
   const cap = ceiling(share);
-  // Headroom above the ceiling, so the limit line and its label are never
-  // pressed against the top of the screen.
-  const yMax = Math.min(9, Math.max(2, cap * 1.2));
+  // What the bright trace actually tends to. The Amdahl limit belongs to the
+  // other trace, and drawing only it overstated the gain by up to 3.6×.
+  const capReal = effectiveCeiling(share, review);
+  /**
+   * Scaled to what is actually drawn, not to the Amdahl limit.
+   *
+   * That limit can sit far above everything on screen — at p = 0.9 it is 10×
+   * while both traces stay under 5 — and scaling to it squashes the whole
+   * picture into the bottom of the tube. The highest thing plotted is the
+   * theoretical trace at full speed.
+   */
+  const highest = Math.max(1 / relativeTime(share, SPEED_MAX), capReal);
+  const yMax = Math.min(9, Math.max(2, highest * 1.18));
 
   const x = (v: number) => PAD + ((v - 1) / (SPEED_MAX - 1)) * (W - 2 * PAD);
   const y = (v: number) => H - PAD - ((Math.min(v, yMax) - 1) / (yMax - 1)) * (H - 2 * PAD);
@@ -186,12 +196,23 @@ export function Oscilloscope({
           ))}
         </g>
 
-        {/* Ceiling: the limit the bright trace cannot cross. */}
+        {/* Two limits. The faint one belongs to the theoretical trace; the
+            bright one is where your own trace actually stops. */}
         <line
           x1={PAD}
           y1={y(cap)}
           x2={W - PAD}
           y2={y(cap)}
+          stroke="var(--color-trace-b)"
+          strokeWidth={1.4}
+          strokeDasharray="3 6"
+          strokeOpacity={0.6}
+        />
+        <line
+          x1={PAD}
+          y1={y(capReal)}
+          x2={W - PAD}
+          y2={y(capReal)}
           stroke="var(--color-trace-c)"
           strokeWidth={2.2}
           strokeDasharray="8 5"
@@ -201,13 +222,13 @@ export function Oscilloscope({
             label would be cut off by the bezel, it drops below it instead. */}
         <text
           x={W - PAD - 6}
-          y={y(cap) - 7 < PAD + readout ? y(cap) + readout + 5 : y(cap) - 7}
+          y={y(capReal) - 7 < PAD + readout ? y(capReal) + readout + 5 : y(capReal) - 7}
           textAnchor="end"
           fontFamily="var(--font-mono)"
           fontSize={readout}
           fill="var(--color-trace-c)"
         >
-          CEILING {f.times(cap)}
+          {copy.scope.limitShort} {f.times(capReal)}
         </text>
 
         {/* CH2: Amdahl with no review. CH1: what you actually get. */}
@@ -294,7 +315,8 @@ export function ScopeLegend({ share, speed, review }: { share: number; speed: nu
   const items = [
     { key: 'CH1', color: 'var(--color-phosphor)', label: copy.scope.ch1, value: f.times(gain(share, speed, review)) },
     { key: 'CH2', color: 'var(--color-trace-b)', label: copy.scope.ch2, value: f.times(1 / relativeTime(share, speed)) },
-    { key: 'LIM', color: 'var(--color-trace-c)', label: copy.scope.limit, value: f.times(ceiling(share)) },
+    { key: 'LIM', color: 'var(--color-trace-c)', label: copy.scope.limit, value: f.times(effectiveCeiling(share, review)) },
+    { key: 'AMD', color: 'var(--color-trace-b)', label: copy.scope.limitTheoretical, value: f.times(ceiling(share)) },
   ];
 
   return (

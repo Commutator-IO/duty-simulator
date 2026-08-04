@@ -122,10 +122,11 @@ function steps(v: WalkthroughValues, set: (patch: Partial<Inputs>) => void): Ste
             modèle.
           </Ask>
           <Tally>
-            À <Live>{f.percent(inputs.share)}</Live>, votre plafond est de{' '}
-            <Live>{f.times(r.ceiling)}</Live>. C'est là que vous arrivez avec un assistant{' '}
-            <em>infiniment rapide</em> — pas dix fois plus rapide : infiniment. Aucune sortie de
-            modèle ne vous fera passer au-dessus tant que ce chiffre ne bouge pas.
+            À <Live>{f.percent(inputs.share)}</Live>, Amdahl seul vous plafonnerait à{' '}
+            <Live>{f.times(r.ceiling)}</Live> — là où vous arrivez avec un assistant{' '}
+            <em>infiniment rapide</em>, pas dix fois plus rapide : infiniment. La vérification
+            rabaissera ce chiffre dans deux questions. Aucune sortie de modèle ne vous fera passer
+            au-dessus tant que celui-ci ne bouge pas.
           </Tally>
         </>
       ),
@@ -374,9 +375,11 @@ export const FR: Copy = {
           ordonnée.
         </>,
         <>
-          <strong className="font-semibold">La ligne ambre en pointillés</strong> est le plafond,{' '}
-          <Live>{f.times(r.ceiling)}</Live>. Remarquez que le tracé vert s'en approche et n'y
-          arrive jamais, aussi loin qu'on regarde vers la droite.
+          <strong className="font-semibold">La ligne ambre en pointillés</strong> est là où votre
+          propre tracé s'arrête : <Live>{f.times(r.effectiveCeiling)}</Live>, vérification
+          comprise. Les pointillés bleus plus haut sont l'Amdahl théorique,{' '}
+          <Live>{f.times(r.ceiling)}</Live> — ce que vous auriez si la relecture était gratuite.
+          L'écart entre les deux lignes est la facture de la question quatre, à vitesse infinie.
         </>,
       ],
       contrast: (
@@ -444,8 +447,9 @@ export const FR: Copy = {
         <strong className="text-ink font-semibold">Ce qu'il faut voir.</strong> Le bloc{' '}
         <em>ce qu'il ne peut pas</em> a exactement la même largeur sur les trois lignes. Rendre
         l'assistant plus rapide raccourcit le bloc accéléré et ne fait rien d'autre. Rendez-le
-        infiniment rapide et ce bloc disparaît complètement — il vous reste toujours celui d'à
-        côté. Ce reste, c'est le plafond, et le seul curseur qui le rétrécit est la portée.
+        infiniment rapide et ce bloc disparaît complètement — il vous reste celui d'à côté, plus la
+        vérification, qui ne disparaît pas parce qu'elle est une fraction du gain et non du
+        travail. Ces deux-là ensemble sont le plafond.
       </>
     ),
   },
@@ -463,7 +467,7 @@ export const FR: Copy = {
     },
     metrics: {
       gain: ['Ce que vous gagnez vraiment', 'Une fois la vérification payée'],
-      ceiling: ['Le plafond dur', "Là où s'arrêterait un outil infiniment rapide"],
+      ceiling: ['Le plafond dur', "Où s'arrête un outil infiniment rapide, vérification comprise"],
       without: ['La même journée, sans IA', 'Pour produire ce que vous produisez'],
       gap: ['Surcharge', 'Positif : la journée courte coûte plus'],
       baseline: ['La nouvelle norme', "Ce qu'on attendra de vous désormais"],
@@ -503,7 +507,9 @@ export const FR: Copy = {
       "Gain global en fonction de l'accélération de l'outil, à part accélérée constante. Le tracé s'aplatit à mesure que la vitesse monte et n'atteint jamais le plafond fixé par la portée.",
     ch1: 'Vérification déduite',
     ch2: 'Amdahl théorique',
-    limit: 'Plafond, vitesse infinie',
+    limit: 'Votre plafond, vitesse infinie',
+    limitShort: 'PLAFOND',
+    limitTheoretical: 'Limite d\'Amdahl, si la vérification était gratuite',
   },
 
   verdicts: {

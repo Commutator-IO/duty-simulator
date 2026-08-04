@@ -81,6 +81,9 @@ export function DayBars({ inputs }: { inputs: Inputs }) {
   const untouched = (1 - inputs.share) * total;
   const accelerated = ((inputs.share / inputs.speed) * total);
   const checking = inputs.hours - untouched - accelerated;
+  // r × (the whole of the accelerated share, since at infinite speed the gain
+  // on that share is total).
+  const checkingAtInfinity = inputs.review * inputs.share * total;
 
   const BRASS = 'var(--color-brass)';
   const SLATE = 'var(--color-slate)';
@@ -109,12 +112,18 @@ export function DayBars({ inputs }: { inputs: Inputs }) {
         ]}
       />
 
+      {/* At infinite speed the accelerated block vanishes — but the review it
+          generated does not, because review is a fraction of the gain. Dropping
+          it here was what overstated the ceiling. */}
       <Row
         title={d.infinite}
-        hours={f.hours(untouched)}
+        hours={f.hours(untouched + checkingAtInfinity)}
         scale={total}
-        segments={[{ key: 'u', width: untouched, color: SLATE, label: d.segments.untouched }]}
-        note={d.infiniteNote(f.times(r.ceiling))}
+        segments={[
+          { key: 'u', width: untouched, color: SLATE, label: d.segments.untouched },
+          { key: 'c', width: checkingAtInfinity, color: ALERT, label: d.segments.checking },
+        ]}
+        note={d.infiniteNote(f.times(r.effectiveCeiling))}
       />
 
       <div className="border-rule text-muted mt-4 flex flex-wrap gap-x-5 gap-y-1.5 border-t pt-3 text-[12.5px]">

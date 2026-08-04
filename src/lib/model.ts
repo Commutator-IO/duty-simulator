@@ -78,14 +78,36 @@ export function gain(share: number, speed: number, review: number): number {
   return 1 / effectiveTime(share, speed, review);
 }
 
-/** What the gain converges to as speed → ∞. Set by `share` alone. */
+/**
+ * The Amdahl limit: what the gain would converge to as speed → ∞ *if review
+ * were free*. Set by `share` alone. Real, but not the one that binds.
+ */
 export function ceiling(share: number): number {
   return 1 / (1 - share);
 }
 
+/**
+ * The ceiling that actually binds.
+ *
+ * At infinite speed the accelerated work costs nothing — but the review it
+ * generates still does, and review is a fraction of the gain, so it does not
+ * vanish with it. The effective duration tends to (1−p) + r·p rather than to
+ * (1−p).
+ *
+ * Read as a control loop this is the familiar result that a large forward gain
+ * leaves the closed-loop gain determined by the feedback path: as s → ∞ with
+ * p → 1, this tends to 1/r. Two independent limits, and the smaller wins.
+ */
+export function effectiveCeiling(share: number, review: number): number {
+  return 1 / (1 - share + review * share);
+}
+
 export type Result = {
   gain: number;
+  /** The Amdahl limit, ignoring review. Shown as the second trace's asymptote. */
   ceiling: number;
+  /** What an infinitely fast tool actually buys, review included. */
+  effectiveCeiling: number;
   /** Hours the same output would have taken without the tool. */
   hoursWithout: number;
   /** hours × density. */
@@ -116,6 +138,7 @@ export function simulate(inputs: Inputs): Result {
   return {
     gain: g,
     ceiling: ceiling(share),
+    effectiveCeiling: effectiveCeiling(share, review),
     hoursWithout,
     loadWith,
     loadWithout: hoursWithout,

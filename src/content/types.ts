@@ -132,7 +132,12 @@ export type Copy = {
     title: string;
     ch1: string;
     ch2: string;
+    /** The limit that binds — the bright trace's asymptote, review included. */
     limit: string;
+    /** Same thing, short enough to sit on the screen. */
+    limitShort: string;
+    /** The Amdahl limit, which belongs to the theoretical trace. */
+    limitTheoretical: string;
   };
 
   verdicts: {

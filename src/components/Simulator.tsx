@@ -156,7 +156,7 @@ export function Simulator({
             {
               key: 'ceiling',
               label: c.metrics.ceiling[0],
-              value: f.times(result.ceiling),
+              value: f.times(result.effectiveCeiling),
               note: c.metrics.ceiling[1],
             },
             {
