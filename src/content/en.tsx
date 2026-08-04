@@ -506,6 +506,87 @@ export const EN: Copy = {
     },
   },
 
+  battery: {
+    kicker: 'Your battery, today',
+    reserve: 'RESERVE',
+    leftToday: (hours) => `${hours} of dense work left before the threshold.`,
+    overBy: (hours) => `You are ${hours} past it. Everything after this is on reserve.`,
+    capacity: 'Capacity at this drain',
+    drawnToday: 'Drawn today',
+    caption: (threshold) => (
+      <>
+        Capacity is the {threshold}-unit sustainable budget divided by how draining an hour is.
+        Raise the drain and the day gets shorter, the same way a heavy process shortens a laptop
+        afternoon — the battery has not changed, the load has.
+      </>
+    ),
+    lead: (
+      <p className="mb-5 max-w-[62ch]">
+        Your laptop has a better model of its own energy than you have of yours. It measures
+        continuously, displays without being asked, warns at thresholds, and finally enforces a
+        stop. You do none of those four things for yourself, and the machine does all of them for a
+        resource that matters less.
+      </p>
+    ),
+    health: {
+      title: 'Charge is not the same as health',
+      body: (
+        <>
+          <p className="mb-4">
+            A battery has two numbers, and only one of them is on the menu bar. Charge comes back
+            overnight. <strong className="font-semibold">Health</strong> does not: deep-cycle a cell
+            often enough and its maximum capacity falls, permanently, and no amount of charging
+            brings it back.
+          </p>
+          <p className="mb-4">
+            That is the distinction the exhaustion research is making. A tired week is charge. What
+            Maslach measures is health — the capacity itself coming down. Which is the reason not to
+            run to zero even on the days you can: the cost is not tonight, it is the ceiling next
+            year.
+          </p>
+        </>
+      ),
+    },
+    build: {
+      title: 'Building one on a Mac',
+      body: (
+        <p className="mb-3">
+          There is no gauge for this, so it has to be assembled out of parts that already exist. The
+          honest version costs about twenty minutes to set up and needs no application.
+        </p>
+      ),
+      bullets: [
+        <>
+          A <em>Shortcuts</em> automation at your start time sets a countdown for the capacity above
+          — not for the length of your day, for the length your drain affords.
+        </>,
+        <>
+          A menu-bar timer showing it, because a figure you have to open something to see is a
+          figure you will not see. This is the display the laptop gives you for free and you do not
+          have.
+        </>,
+        <>
+          At zero, a scheduled <em>Focus</em> ends the work block and Downtime starts. Not a
+          notification — the thing the machine does at 0%, which is stop.
+        </>,
+        <>
+          The charger is time away, and it has to cost time. If topping up is a button, you have
+          rebuilt <strong>Ignore Limit</strong>, and the page has already explained what that
+          teaches you.
+        </>,
+      ],
+    },
+    honest: (
+      <>
+        <strong className="text-ink font-semibold">Where the metaphor lies.</strong> A battery
+        discharges roughly linearly and recharges quickly. Fatigue does neither: the eleventh hour
+        costs more than the first, and recovery is slower than expenditure and never quite complete.
+        A faithful gauge would drain faster as it emptied and refill more slowly than it drained. Do
+        not read the symmetry as a promise.
+      </>
+    ),
+  },
+
   macos: {
     designator: 'What to change',
     title: 'The one number you can actually move',

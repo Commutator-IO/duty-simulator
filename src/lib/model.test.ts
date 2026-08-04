@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   BOUNDS,
+  battery,
   effectiveCeiling,
   DEFAULTS,
   breakEvenDensity,
@@ -11,6 +12,7 @@ import {
   loadVerdict,
   ratchetVerdict,
   relativeTime,
+  SUSTAINABLE_LOAD,
   simulate,
 } from './model';
 
@@ -168,6 +170,37 @@ describe('verdicts', () => {
     expect(ratchetVerdict(0)).toBe('withheld');
     expect(ratchetVerdict(0.5)).toBe('partial');
     expect(ratchetVerdict(1)).toBe('surrendered');
+  });
+});
+
+describe('the battery', () => {
+  it('affords fewer hours as the drain rises', () => {
+    const easy = battery({ ...DEFAULTS, density: 1 });
+    const hard = battery({ ...DEFAULTS, density: 1.7 });
+    expect(easy.capacityHours).toBeGreaterThan(hard.capacityHours);
+    expect(easy.capacityHours).toBe(SUSTAINABLE_LOAD);
+  });
+
+  it('reads empty exactly at the sustainable threshold', () => {
+    const at = battery({ ...DEFAULTS, hours: SUSTAINABLE_LOAD, density: 1 });
+    expect(at.charge).toBeCloseTo(0, 10);
+    expect(at.hoursLeft).toBeCloseTo(0, 10);
+  });
+
+  it('goes past empty rather than clamping', () => {
+    // Running on reserve is what people do; a gauge that stopped at zero would
+    // be the flattering version of the same number.
+    const spent = battery(DEFAULTS);
+    expect(spent.charge).toBeLessThan(0);
+    expect(spent.hoursLeft).toBeLessThan(0);
+  });
+
+  it('agrees with the load the instrument shows', () => {
+    for (const density of [1, 1.3, 1.7]) {
+      const inputs = { ...DEFAULTS, density };
+      const b = battery(inputs);
+      expect(b.charge).toBeCloseTo(1 - simulate(inputs).loadWith / SUSTAINABLE_LOAD, 10);
+    }
   });
 });
 

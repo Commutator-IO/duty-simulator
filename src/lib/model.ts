@@ -158,6 +158,37 @@ export function breakEvenDensity(share: number, speed: number, review: number): 
   return gain(share, speed, review);
 }
 
+/**
+ * The day read as a battery.
+ *
+ * The machine in front of you has a better model of its own energy than you
+ * have of yours: it measures, displays continuously, warns at thresholds, and
+ * enforces a stop. This is the same four things for the person using it.
+ *
+ * `capacityHours` is how long the sustainable budget affords at this drain, so
+ * raising drain shortens the day the same way a heavy process shortens a laptop
+ * afternoon. `charge` goes negative rather than clamping, because running past
+ * empty is exactly what people do and hiding it would be the flattering
+ * version.
+ */
+export type Battery = {
+  /** Hours of dense work the budget affords at this drain. */
+  capacityHours: number;
+  /** 1 at full, 0 at the threshold, negative once past it. */
+  charge: number;
+  /** Hours left before the threshold; negative once over. */
+  hoursLeft: number;
+};
+
+export function battery(inputs: Inputs): Battery {
+  const capacityHours = SUSTAINABLE_LOAD / inputs.density;
+  return {
+    capacityHours,
+    charge: 1 - (inputs.hours * inputs.density) / SUSTAINABLE_LOAD,
+    hoursLeft: capacityHours - inputs.hours,
+  };
+}
+
 export type LoadVerdict = 'unsustainable' | 'heavier' | 'lighter';
 
 /**

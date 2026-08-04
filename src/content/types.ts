@@ -145,6 +145,22 @@ export type Copy = {
     ratchet: (result: Result, inputs: Inputs) => string;
   };
 
+  battery: {
+    kicker: string;
+    /** Printed across the cell once it is flat. */
+    reserve: string;
+    leftToday: (hours: string) => string;
+    overBy: (hours: string) => string;
+    capacity: string;
+    drawnToday: string;
+    caption: (threshold: string) => ReactNode;
+    /** The idea itself: why a battery, and what a charger is. */
+    lead: ReactNode;
+    health: { title: string; body: ReactNode };
+    build: { title: string; body: ReactNode; bullets: ReactNode[] };
+    honest: ReactNode;
+  };
+
   macos: {
     designator: string;
     title: string;

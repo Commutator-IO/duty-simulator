@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Note, Path, SectionHead, SubHead } from './Cards';
+import { Battery } from './Battery';
 import { Segmented } from './Fields';
 import { useCopy } from '../content';
 import { breakEvenDensity, simulate, type Inputs } from '../lib/model';
@@ -64,6 +65,28 @@ export function MacosSettings({ inputs }: { inputs: Inputs }) {
         {m.ambition}
 
         <Note>{m.principle}</Note>
+
+        <div className="mt-12">
+          {copy.battery.lead}
+          <Battery inputs={inputs} />
+
+          <div className="mt-8">
+            <SubHead title={copy.battery.health.title} />
+            {copy.battery.health.body}
+          </div>
+
+          <div className="mt-8">
+            <SubHead title={copy.battery.build.title} />
+            {copy.battery.build.body}
+            <ul className="mb-3.5 list-disc pl-5 [&>li]:mb-1.5">
+              {copy.battery.build.bullets.map((b, i) => (
+                <li key={i}>{b}</li>
+              ))}
+            </ul>
+          </div>
+
+          <p className="caption mt-4 max-w-[66ch]">{copy.battery.honest}</p>
+        </div>
 
         <div className="mt-10">
           <SubHead title={m.measure.title} sub={m.measure.sub} />

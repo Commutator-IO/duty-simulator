@@ -536,6 +536,89 @@ export const FR: Copy = {
     },
   },
 
+  battery: {
+    kicker: "Votre batterie, aujourd'hui",
+    reserve: 'RÉSERVE',
+    leftToday: (hours) => `${hours} de travail dense avant le seuil.`,
+    overBy: (hours) => `Vous l'avez dépassé de ${hours}. Tout ce qui suit est sur la réserve.`,
+    capacity: 'Capacité à cette fatigue',
+    drawnToday: "Tiré aujourd'hui",
+    caption: (threshold) => (
+      <>
+        La capacité, c'est le budget tenable de {threshold} unités divisé par ce que coûte une
+        heure. Augmentez la fatigue et la journée raccourcit, exactement comme un processus lourd
+        raccourcit un après-midi sur portable — la batterie n'a pas changé, la charge si.
+      </>
+    ),
+    lead: (
+      <p className="mb-5 max-w-[62ch]">
+        Votre ordinateur a un meilleur modèle de son énergie que vous du vôtre. Il mesure en
+        continu, affiche sans qu'on le lui demande, prévient à des seuils, et finit par imposer
+        l'arrêt. Vous ne faites aucune de ces quatre choses pour vous-même, et la machine les fait
+        toutes pour une ressource qui compte moins.
+      </p>
+    ),
+    health: {
+      title: "La charge n'est pas la santé",
+      body: (
+        <>
+          <p className="mb-4">
+            Une batterie a deux chiffres, et un seul est dans la barre de menus. La charge revient
+            en une nuit. La <strong className="font-semibold">santé</strong>, non : enchaînez les
+            cycles profonds et la capacité maximale baisse, définitivement, et aucune recharge ne la
+            ramène.
+          </p>
+          <p className="mb-4">
+            C'est exactement la distinction que fait la recherche sur l'épuisement. Une semaine
+            fatigante, c'est de la charge. Ce que mesure Maslach, c'est la santé — la capacité
+            elle-même qui descend. D'où la raison de ne pas aller à zéro même les jours où l'on
+            peut : le coût n'est pas ce soir, c'est le plafond l'an prochain.
+          </p>
+        </>
+      ),
+    },
+    build: {
+      title: 'En fabriquer une sur un Mac',
+      body: (
+        <p className="mb-3">
+          Aucune jauge n'existe pour ça, il faut donc l'assembler avec des pièces déjà présentes. La
+          version honnête demande une vingtaine de minutes et aucune application.
+        </p>
+      ),
+      bullets: [
+        <>
+          Une automatisation <em>Shortcuts</em> à votre heure de début lance un compte à rebours sur
+          la capacité ci-dessus — pas sur la durée de votre journée, sur celle que votre fatigue
+          autorise.
+        </>,
+        <>
+          Un minuteur en barre de menus qui l'affiche, parce qu'un chiffre qu'il faut ouvrir quelque
+          chose pour voir est un chiffre que vous ne verrez pas. C'est l'affichage que le portable
+          vous offre et que vous n'avez pas.
+        </>,
+        <>
+          À zéro, un <em>Focus</em> programmé termine le bloc et Downtime démarre. Pas une
+          notification — ce que la machine fait à 0 %, c'est-à-dire s'arrêter.
+        </>,
+        <>
+          Le chargeur, c'est du temps loin du clavier, et il doit coûter du temps. Si recharger est
+          un bouton, vous avez reconstruit <strong>Ignore Limit</strong>, et cette page a déjà dit
+          ce que ça apprend.
+        </>,
+      ],
+    },
+    honest: (
+      <>
+        <strong className="text-ink font-semibold">Là où la métaphore ment.</strong> Une batterie se
+        décharge à peu près linéairement et se recharge vite. La fatigue ne fait ni l'un ni l'autre :
+        la onzième heure coûte plus que la première, et la récupération est plus lente que la
+        dépense sans jamais être complète. Une jauge fidèle se viderait de plus en plus vite et se
+        remplirait plus lentement qu'elle ne s'est vidée. Ne lisez pas la symétrie comme une
+        promesse.
+      </>
+    ),
+  },
+
   macos: {
     designator: 'En pratique',
     title: 'Le seul chiffre que vous puissiez vraiment déplacer',
