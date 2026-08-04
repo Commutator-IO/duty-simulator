@@ -944,7 +944,8 @@ export const EN: Copy = {
       warning: (
         <>
           None of these settings touch the workload assigned to you, the vagueness of what is
-          expected, or unsupported ADHD — the three causes that recur most in repeated burnout.
+          expected, or a health matter nobody has looked at — the three causes that recur most in
+          repeated burnout.
           Tooling cushions; it does not treat. Occupational health services are free, available at
           your own initiative, and covered by medical confidentiality.
         </>

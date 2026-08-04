@@ -996,8 +996,8 @@ export const FR: Copy = {
       warning: (
         <>
           Aucun de ces réglages n'agit sur la charge qu'on vous confie, sur le flou des attentes, ni
-          sur un TDAH non accompagné — les trois causes qui reviennent le plus dans les burn-out à
-          répétition. L'outillage amortit ; il ne soigne pas. La médecine du travail est gratuite,
+          sur ce qui relèverait d'un suivi médical et n'en a jamais eu — les trois causes qui
+          reviennent le plus dans les burn-out à répétition. L'outillage amortit ; il ne soigne pas. La médecine du travail est gratuite,
           accessible à votre initiative, et couverte par le secret médical.
         </>
       ),
