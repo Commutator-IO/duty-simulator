@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   BOUNDS,
+  WEEK_DAYS,
   battery,
+  quota,
   damkohler,
   effectiveCeiling,
   limitingStep,
@@ -205,6 +207,34 @@ describe('the battery', () => {
       const b = battery(inputs);
       expect(b.charge).toBeCloseTo(1 - simulate(inputs).loadWith / SUSTAINABLE_LOAD, 10);
     }
+  });
+});
+
+describe('the weekly ration', () => {
+  it('is the daily capacity, five times over', () => {
+    const inputs = { ...DEFAULTS, density: 1.3 };
+    expect(quota(inputs).weekly).toBeCloseTo(battery(inputs).capacityHours * WEEK_DAYS, 10);
+  });
+
+  it('leaves exactly an ordinary day when the pace is exactly sustainable', () => {
+    // The point where the two limits agree: nothing banked, nothing borrowed.
+    const daily = SUSTAINABLE_LOAD / 1.3;
+    const q = quota({ ...DEFAULTS, hours: daily, density: 1.3 });
+    expect(q.burst).toBeCloseTo(daily, 10);
+    expect(q.drawn).toBeCloseTo(q.weekly, 10);
+  });
+
+  it('banks a longer day when the pace is under capacity, and borrows when it is over', () => {
+    const under = quota({ ...DEFAULTS, hours: 2, density: 1.3 });
+    const over = quota({ ...DEFAULTS, hours: 4, density: 1.3 });
+    const daily = SUSTAINABLE_LOAD / 1.3;
+    expect(under.burst).toBeGreaterThan(daily);
+    expect(over.burst).toBeLessThan(daily);
+  });
+
+  it('goes to nothing once four days at this pace spend the week', () => {
+    // The gauge prints this rather than a negative hour count.
+    expect(quota({ ...DEFAULTS, hours: 9, density: 1.3 }).burst).toBeLessThanOrEqual(0);
   });
 });
 

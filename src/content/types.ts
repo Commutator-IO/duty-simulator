@@ -194,6 +194,26 @@ export type Copy = {
     honest: ReactNode;
   };
 
+  /** The week read as a ration, next to the day read as a battery. */
+  quota: {
+    title: string;
+    lead: ReactNode;
+    kicker: string;
+    ration: string;
+    drawn: string;
+    /** Sits under the brass line on the bar. */
+    rationMark: string;
+    burstKicker: string;
+    banked: (hours: string) => string;
+    borrowed: (hours: string) => string;
+    noBurst: string;
+    caption: (days: string) => ReactNode;
+    twoLimits: { title: string; body: ReactNode };
+    bucket: { title: string; body: ReactNode };
+    cliff: { title: string; body: ReactNode };
+    honest: ReactNode;
+  };
+
   macos: {
     designator: string;
     title: string;

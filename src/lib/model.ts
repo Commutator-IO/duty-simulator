@@ -189,6 +189,42 @@ export function battery(inputs: Inputs): Battery {
   };
 }
 
+/** Working days a ration is spread over. Five, and the weekend is not a credit. */
+export const WEEK_DAYS = 5;
+
+/**
+ * The same budget, read over a week instead of a day.
+ *
+ * A daily cap and a weekly ration are not the same instrument, and the
+ * difference is the whole point. The daily one limits how hard you may go at
+ * any moment; the weekly one limits the total, and lets a light day pay for a
+ * heavy one. Neither replaces the other — a week can be well inside its ration
+ * and still have been survived one ruinous day at a time.
+ *
+ * `burst` is the number the daily gauge cannot show: the longest single day the
+ * week affords once the other four are held at today's draw. Above the daily
+ * capacity you have banked something; below it you are already borrowing. It
+ * goes negative when four days at this pace have spent the week on their own,
+ * which is worth printing rather than hiding.
+ */
+export type Quota = {
+  /** Dense hours the week affords at this drain. */
+  weekly: number;
+  /** Dense hours the week spends if every day looks like this one. */
+  drawn: number;
+  /** The longest day the week still affords, the others held at today's draw. */
+  burst: number;
+};
+
+export function quota(inputs: Inputs): Quota {
+  const weekly = battery(inputs).capacityHours * WEEK_DAYS;
+  return {
+    weekly,
+    drawn: inputs.hours * WEEK_DAYS,
+    burst: weekly - inputs.hours * (WEEK_DAYS - 1),
+  };
+}
+
 /**
  * Which step is limiting, read the way a chemical engineer reads a reactor.
  *

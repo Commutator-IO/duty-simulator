@@ -50,7 +50,8 @@ Four tabs, held in `App.tsx`:
 1. **Start here** (`walkthrough`) — the guided read. Explains one idea, hands over the one
    fader it controls, shows what moved, then goes on. Sets every value for the whole page.
 2. **The instrument** (`simulator`) — the fader console, readouts, oscilloscope, load meters.
-3. **What to change** (`macos`) — Screen Time and Focus, plus the regime table.
+3. **What to change** (`macos`) — the day as a battery, the week as a ration, Screen Time and
+   Focus, plus the regime table.
 4. **The research** (`foundations`) — fourteen cards on a timeline, 1865 → 2025.
 
 The walkthrough and the research cards must stay consistent: the walkthrough argues from
@@ -105,6 +106,9 @@ ceiling = 1 / (1 − p)          as s → ∞
   taken back by review, `h` dense hours per day with AI, `d` cognitive density of an hour.
 - Load: `h × d` with AI against `h × gain` without. Sustainable threshold set at 4 units.
 - Break-even: the day starts costing more the moment `d` reaches `gain`. Exactly.
+- Ration: the same budget over five days. `burst = 5 × capacity − 4 × h` is the longest day the
+  week still affords, which is the one figure the daily gauge cannot show. It goes negative, and
+  the gauge says so rather than printing a negative hour count.
 - Ratchet: `visible = 1 + v × (gain − 1)`, hours after the ratchet `h × visible / gain`,
   margin kept `h × gain − h × visible`.
 

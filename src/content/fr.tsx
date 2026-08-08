@@ -848,6 +848,118 @@ export const FR: Copy = {
     ),
   },
 
+  quota: {
+    title: "L'autre façon de rationner : à la semaine",
+    lead: (
+      <p className="mb-5 max-w-[62ch]">
+        L'outil qui a lancé tout ça se rationne lui-même, et il le fait avec deux limites plutôt
+        qu'une. Une fenêtre courte — quelques heures, qui glissent à partir de votre premier message
+        — plafonne l'intensité à un instant donné. Et un total hebdomadaire, remis à zéro tous les
+        sept jours, plafonne la dépense globale. Atteindre l'une ne touche pas l'autre.
+      </p>
+    ),
+    kicker: 'Votre semaine, à ce rythme',
+    ration: 'Ration de la semaine',
+    drawn: 'Dépensé, cinq jours comme celui-ci',
+    rationMark: 'ration',
+    banked: (hours) => `${hours} de plus qu'une journée ordinaire. C'est ce qu'ont acheté les journées légères.`,
+    borrowed: (hours) => `${hours} de moins qu'une journée ordinaire. La semaine s'emprunte déjà à elle-même.`,
+    burstKicker: 'La plus longue journée que la semaine autorise encore',
+    noBurst: 'Aucune — quatre journées à ce rythme épuisent la semaine.',
+    caption: (days) => (
+      <>
+        {days} jours ouvrés, chacun à la fatigue réglée sur l'instrument. Les traits sont les
+        journées ; la ligne laiton est l'endroit où la semaine devait s'arrêter. Rien ici ne se
+        reporte de la semaine passée, et c'est tout l'objet de la section plus bas.
+      </>
+    ),
+    twoLimits: {
+      title: 'Pourquoi deux limites et pas une',
+      body: (
+        <>
+          <p className="mb-4">
+            Elles ne protègent pas la même chose. La fenêtre courte protège la capacité à un
+            instant : quelle que soit la quantité disponible, il n'en existe qu'une part à la fois.
+            Le total hebdomadaire protège le coût de l'ensemble, qui est une autre grandeur et qu'on
+            peut faire exploser sans jamais toucher à la première.
+          </p>
+          <p className="mb-4">
+            Vous possédez déjà cette distinction, dans le mur derrière vous. Le disjoncteur limite
+            ce que vous tirez à l'instant. La facture compte ce que vous avez tiré sur un mois. On
+            peut faire sauter le disjoncteur en n'ayant presque rien consommé, et gonfler la facture
+            sans jamais le faire sauter. Deux grandeurs, deux protections, et aucune ne remplace
+            l'autre.
+          </p>
+          <p className="mb-4">
+            Lisez la jauge ci-dessus ainsi. La capacité du jour, c'est le disjoncteur. La ration de
+            la semaine, c'est la facture. Une semaine peut tenir confortablement dans sa ration et
+            avoir malgré tout été traversée une journée ruineuse après l'autre.
+          </p>
+        </>
+      ),
+    },
+    bucket: {
+      title: 'Un seul mécanisme produit les deux',
+      body: (
+        <>
+          <p className="mb-4">
+            Imaginez un seau qui se remplit à débit constant et ne contient qu'une quantité fixe.
+            Chaque demande en prélève une part. Deux comportements sortent d'un seul objet : le
+            débit de remplissage est ce que vous tenez indéfiniment, la profondeur est ce que vous
+            pouvez dépenser d'un coup après une période calme. La limitation de débit a un nom pour
+            ça, et c'est, assez maladroitement,{' '}
+            <strong className="font-semibold">le seau à jetons</strong>.
+          </p>
+          <p className="mb-4">
+            La figure ci-dessus en est la version grossière. La ration, c'est la profondeur, et une
+            journée, c'est un retrait. Ce que le seau ajoute, c'est qu'une journée légère achète
+            réellement quelque chose — affirmation qui porte sur votre récupération, et qu'il faut
+            manier avec prudence, puisque c'est exactement l'endroit où la batterie a déjà reconnu
+            qu'elle mentait.
+          </p>
+        </>
+      ),
+    },
+    cliff: {
+      title: "Ce qu'une date de remise à zéro vous fait",
+      body: (
+        <>
+          <p className="mb-4">
+            Voici le défaut de ce dispositif, et vous allez le reconnaître. Une ration qui ne se
+            reporte pas invite à la dépenser. Deux jours restants, un quart de la semaine inutilisé,
+            et l'arithmétique suggère discrètement qu'on aurait tort de s'en priver. L'argent ne
+            fait pas ça — un euro non dépensé reste un euro le mois suivant — de sorte que
+            l'intuition qu'on emprunte à la gestion d'un budget nous égare ici.
+          </p>
+          <p className="mb-4">
+            La même figure apparaît partout où une période s'achève et où le solde s'évapore : les
+            comptes à usage perdu vidés en décembre, et le dimanche qu'il faut expédier avant lundi.
+            Ce n'est pas une faiblesse. C'est l'incitation créée par la remise à zéro, qui fonctionne
+            exactement comme prévu.
+          </p>
+          <p className="mb-4">
+            Le seau, lui, n'a pas de date de remise à zéro, et c'est pourquoi il ne produit pas cet
+            effet. Il se remplit en continu : il n'existe jamais d'instant où une capacité inutilisée
+            est sur le point d'être perdue. Si vous vous fabriquez une ration, fabriquez celle qui
+            se remplit.
+          </p>
+        </>
+      ),
+    },
+    honest: (
+      <>
+        <strong className="text-ink font-semibold">La transposition, et ses limites.</strong> Un
+        budget domestique a les deux mêmes étages — ce que peut être un paiement, et ce que peut
+        totaliser le mois — et la méthode des enveloppes est le seau à jetons fait à la main. Manger
+        les a aussi : la satiété plafonne le débit, le bilan énergétique plafonne le total. Mais
+        remarquez laquelle des deux est imposée par autre chose que votre seule volonté, et laquelle
+        est celle sur laquelle on échoue. Cette asymétrie, c'est toute cette page en une ligne, et
+        c'est la raison pour laquelle les réglages ci-dessous se posent sur la machine plutôt que se
+        promettent à soi-même.
+      </>
+    ),
+  },
+
   macos: {
     designator: 'En pratique',
     title: 'Le seul chiffre que vous puissiez vraiment déplacer',

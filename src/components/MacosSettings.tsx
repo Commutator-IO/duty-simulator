@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Note, Path, SectionHead, SubHead } from './Cards';
 import { Battery } from './Battery';
+import { Quota } from './Quota';
 import { Segmented } from './Fields';
 import { useCopy } from '../content';
 import { breakEvenDensity, simulate, type Inputs } from '../lib/model';
@@ -86,6 +87,30 @@ export function MacosSettings({ inputs }: { inputs: Inputs }) {
           </div>
 
           <p className="caption mt-4 max-w-[66ch]">{copy.battery.honest}</p>
+        </div>
+
+        {/* The same budget over a week: a ration, with the reset it comes with. */}
+        <div className="mt-12">
+          <SubHead title={copy.quota.title} />
+          {copy.quota.lead}
+          <Quota inputs={inputs} />
+
+          <div className="mt-8">
+            <SubHead title={copy.quota.twoLimits.title} />
+            {copy.quota.twoLimits.body}
+          </div>
+
+          <div className="mt-8">
+            <SubHead title={copy.quota.bucket.title} />
+            {copy.quota.bucket.body}
+          </div>
+
+          <div className="mt-8">
+            <SubHead title={copy.quota.cliff.title} />
+            {copy.quota.cliff.body}
+          </div>
+
+          <p className="caption mt-4 max-w-[66ch]">{copy.quota.honest}</p>
         </div>
 
         <div className="mt-10">

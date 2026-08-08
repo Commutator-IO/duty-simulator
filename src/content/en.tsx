@@ -812,6 +812,113 @@ export const EN: Copy = {
     ),
   },
 
+  quota: {
+    title: 'The other way to ration: a week at a time',
+    lead: (
+      <p className="mb-5 max-w-[62ch]">
+        The tool that started all this rations itself, and it does it with two limits rather than
+        one. There is a short window — a few hours, sliding forward from your first message — that
+        caps how hard you can go at once. And there is a weekly total, reset every seven days, that
+        caps how much you can spend altogether. Hitting one does not touch the other.
+      </p>
+    ),
+    kicker: 'Your week, at this pace',
+    ration: 'Ration for the week',
+    drawn: 'Spent, five days like this',
+    rationMark: 'ration',
+    burstKicker: 'The longest day the week still affords',
+    banked: (hours) => `${hours} more than an ordinary day. That is what the light days bought.`,
+    borrowed: (hours) => `${hours} short of an ordinary day. The week is already lending to itself.`,
+    noBurst: 'None — four days at this pace spend the week.',
+    caption: (days) => (
+      <>
+        {days} working days, each at the drain set on the instrument. The ticks are the days; the
+        brass line is where the week was meant to stop. Nothing here carries over from last week,
+        which is the point of the section below.
+      </>
+    ),
+    twoLimits: {
+      title: 'Why two limits and not one',
+      body: (
+        <>
+          <p className="mb-4">
+            They protect different things. The short window protects capacity at a moment: however
+            much there is to go round, only so much of it exists at once. The weekly total protects
+            the cost of the whole thing, which is a different quantity and can be blown without ever
+            touching the first.
+          </p>
+          <p className="mb-4">
+            You already own this distinction, in the wall behind you. The breaker limits how much
+            you may draw at any instant. The bill counts what you drew over a month. You can trip
+            the breaker having used almost nothing, and you can run up a large bill without ever
+            tripping it. Two quantities, two protections, and neither substitutes for the other.
+          </p>
+          <p className="mb-4">
+            Read the gauge above that way. The daily capacity is the breaker. The weekly ration is
+            the bill. A week can sit comfortably inside its ration and still have been got through
+            one ruinous day at a time.
+          </p>
+        </>
+      ),
+    },
+    bucket: {
+      title: 'One mechanism gives you both',
+      body: (
+        <>
+          <p className="mb-4">
+            Picture a bucket that refills at a steady rate and holds a fixed amount. Every request
+            takes some out. Two behaviours fall out of one object: the refill rate is what you can
+            sustain indefinitely, and the depth is how much you may spend in one go after a quiet
+            stretch. Rate limiting has a name for this and it is, awkwardly enough, the{' '}
+            <strong className="font-semibold">token bucket</strong>.
+          </p>
+          <p className="mb-4">
+            The figure above is the crude version of the same thing. The ration is the depth, and a
+            day is a withdrawal. What the bucket adds is that a light day genuinely buys you
+            something — which is a claim about your own recovery, and one worth being careful with,
+            since it is exactly where the battery already admitted it lies.
+          </p>
+        </>
+      ),
+    },
+    cliff: {
+      title: 'What a reset date does to you',
+      body: (
+        <>
+          <p className="mb-4">
+            Here is the failure this design has, and you will recognise it. A ration that does not
+            carry over invites you to spend it. Two days left and a quarter of the week unused, and
+            the arithmetic quietly suggests you may as well. Money does not do this — an unspent
+            euro is still a euro next month — so the instinct we borrow from budgeting misleads us
+            here.
+          </p>
+          <p className="mb-4">
+            The same shape turns up wherever a period ends and the balance evaporates: benefit
+            accounts spent down in December, and the Sunday that has to be got out of the way
+            before Monday. It is not weakness. It is the incentive the reset creates, working
+            exactly as designed.
+          </p>
+          <p className="mb-4">
+            The bucket has no reset date, which is why it does not produce this. It fills
+            continuously, so there is never a moment at which unspent capacity is about to be lost.
+            If you build yourself a ration, build the refilling kind.
+          </p>
+        </>
+      ),
+    },
+    honest: (
+      <>
+        <strong className="text-ink font-semibold">The transposition, and its limits.</strong> A
+        household budget has the same two tiers — what a single payment may be, and what the month
+        may total — and envelope budgeting is the token bucket done by hand. Eating has them too:
+        appetite caps the rate, the energy balance caps the total. But notice which of those two is
+        enforced by something other than your own resolve, and which is the one people fail at. That
+        asymmetry is this whole page in one line, and it is the reason the settings below are set on
+        the machine rather than promised to yourself.
+      </>
+    ),
+  },
+
   macos: {
     designator: 'What to change',
     title: 'The one number you can actually move',
