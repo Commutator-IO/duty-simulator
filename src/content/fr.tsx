@@ -1260,6 +1260,31 @@ export const FR: Copy = {
         body: "Quand vous changez de tâche, une part de votre attention reste accrochée à la précédente — surtout si vous l'avez laissée inachevée. Leroy a montré que l'effet est mesurable : la performance sur la nouvelle tâche est dégradée, et le reste un moment.",
         so: "Le coût d'une interruption n'est pas la durée de l'interruption. C'est la plage de travail dégradé qui suit. À rapprocher de l'effet Zeigarnik de 1927 : l'inachevé revient en tête.",
       },
+      michaelis: {
+        title: "Là où accélérer cesse d'agir",
+        body: "Une enzyme accélère une réaction, mais jusqu'à un certain point seulement. Apportez-lui toujours plus de matière à transformer et la vitesse cesse de monter, parce que chaque molécule d'enzyme est déjà occupée. Le plafond tient au nombre d'enzymes, pas à la quantité de travail qu'on leur amène. Michaelis et Menten ont écrit la courbe en 1913, et c'est encore la première chose qu'on enseigne sur les vitesses de réaction.",
+        so: "L'arithmétique de cette page suppose que vérifier deux fois plus de production coûte exactement deux fois plus. Ce n'est vrai que tant que vous êtes loin de votre propre limite. Mettez cette courbe à la place, comme le fait le réacteur, et le gain cesse de monter avec la vitesse — puis, passé un point, redescend.",
+      },
+      black: {
+        title: "Renvoyer la sortie dans l'entrée",
+        body: "Black a trouvé l'idée dans le ferry qui le menait au travail, en 1927. Prélevez une part de ce que produit un amplificateur, retranchez-la de ce qui y entre, et l'appareil devient stable et prévisible — au prix de l'essentiel de sa puissance brute. Le plus frappant est ce que cela fait au résultat : ce qui sort ne dépend presque plus de l'amplificateur, mais de la fraction que vous avez renvoyée.",
+        so: "La vérification est une boucle de retour, et c'est pourquoi le plafond, ici, ne porte pas vraiment sur l'outil. Rendez-le infiniment rapide, confiez-lui tout le travail, et le gain se pose à un divisé par la part que vous vérifiez. Un quart vérifié, c'est quatre fois, et rien ne fait mieux.",
+      },
+      damkohler: {
+        title: "Quelle étape est la lente",
+        body: "Un ingénieur chimiste qui compare deux durées : le temps que met la réaction elle-même, et le temps qu'il faut pour amener les réactifs là où elle se produit. La plus longue des deux décide de ce que produit le réacteur, l'autre est presque gratuite. Damköhler a condensé la comparaison en un seul nombre sans dimension en 1936, et ce qu'il indique, c'est laquelle des deux mérite qu'on y mette de l'argent.",
+        so: "En dessous de 1, la part que l'outil ne touche jamais domine et l'accélérer ne change presque rien — élargissez plutôt sa portée. Au-dessus de 1, la vitesse vaut encore d'être achetée. Le réacteur affiche le nombre pour vos propres réglages, ce qui en fait la réponse la plus courte de cette page à « quel fader je bouge ? ».",
+      },
+      thaler: {
+        title: "L'argent dans des enveloppes",
+        body: "Un euro est un euro, et peu importe de quelle poche il sort. Les gens ne se comportent pas ainsi. Thaler a montré que nous rangeons l'argent dans des comptes mentaux séparés, avec chacun ses règles — les mêmes dix euros économisés justifient de traverser la ville sur un petit achat et pas sur un gros — et que tenir un budget par enveloppes, c'est cet instinct rendu délibéré.",
+        so: "Cela explique pourquoi une ration ne se comporte pas du tout comme un salaire. Un euro non dépensé reste un euro le mois suivant : refuser de le gaspiller est sensé. Une ration non dépensée s'évapore à la date de remise à zéro, et le même instinct vous dit désormais de la dépenser tant qu'elle existe.",
+      },
+      turner: {
+        title: 'Le seau qui continue de se remplir',
+        body: "Les réseaux doivent tenir un trafic moyen sans punir les rafales occasionnelles. Turner a décrit le mécanisme en 1986 : un seau qui se remplit à débit constant, chaque paquet en prélevant une part. Un seul objet, deux limites — le débit de remplissage est ce que vous tenez indéfiniment, la profondeur est ce que vous pouvez dépenser d'un coup après une période calme. Le seau à jetons est le même dispositif retourné, et il admet exactement le même trafic.",
+        so: "Un quota hebdomadaire en est la version grossière : un total fixe avec une date dessus. Le seau n'a pas de date, et c'est précisément la raison pour laquelle il ne vous pousse jamais à le vider avant qu'elle n'arrive.",
+      },
       acemoglu: {
         title: 'Pouvoir et progrès',
         body: "Mille ans de changement technique, et le constat qui les traverse : une technologie nouvelle n'améliore pas automatiquement le sort de tout le monde. Que les gains soient partagés ou captés dépend de qui détient le rapport de force au moment où elle arrive — le moulin médiéval a enrichi les abbés, et le premier siècle de machines industrielles a fait baisser le niveau de vie avant de le relever.",
@@ -1273,9 +1298,10 @@ export const FR: Copy = {
     },
     designator: 'Les sources',
     title: "D'où vient tout ceci",
-    sub: (count, from, to) =>
-      `${count} travaux, dans l'ordre de leur publication — d'un livre sur le charbon britannique en ${from} à une étude d'usage en ${to}. Deux d'entre eux sont ce que l'instrument calcule réellement. Les autres sont là pour expliquer pourquoi les chiffres seuls ne suffisent pas, et dans trois cas pourquoi il faut les manier avec précaution.`,
-    inInstrument: "Dans l'instrument",
+    sub: (count, computed, from, to) =>
+      `${count} travaux, dans l'ordre de leur publication — d'un livre sur le charbon britannique en ${from} à une étude d'usage en ${to}. ${computed} d'entre eux sont ce que cette page calcule réellement. Les autres sont là pour expliquer pourquoi les chiffres seuls ne suffisent pas, et dans trois cas pourquoi il faut les manier avec précaution.`,
+    computed: 'Calculé ici',
+    credits: 'Crédits :',
     here: 'Ici',
     to: 'à',
     caveat: (

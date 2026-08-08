@@ -31,6 +31,15 @@ export type Portrait = {
   page: string;
   by: string;
   licence: string;
+  /**
+   * Who is in the picture, where that is not the first person on the entry.
+   *
+   * The credit line used to name the last person listed, which quietly
+   * attributed the Yerkes photograph to Dodson — a man the page states has no
+   * freely-licensed picture at all. Crediting the wrong face is worse than
+   * showing initials, so the subject is recorded rather than guessed.
+   */
+  of?: string;
   /** `object-position`, when a face sits off-centre in the source frame. */
   focus?: string;
 };
@@ -48,6 +57,11 @@ export type CardId =
   | 'burnout'
   | 'gustafson'
   | 'leroy'
+  | 'michaelis'
+  | 'damkohler'
+  | 'black'
+  | 'turner'
+  | 'thaler'
   | 'acemoglu'
   | 'economicIndex';
 
@@ -155,6 +169,7 @@ const ENTRIES: readonly Card[] = [
       page: `${commons}Christina_Maslach_portrait2.jpg`,
       by: 'Philip Zimbardo',
       licence: 'CC BY-SA 4.0',
+      of: 'Christina Maslach',
     },
   },
   {
@@ -179,6 +194,45 @@ const ENTRIES: readonly Card[] = [
       licence: 'CC BY-SA 4.0',
     },
   },
+  /**
+   * The four entries the reactor and the ration are built on.
+   *
+   * Michaelis-Menten and Damköhler are computed rather than quoted: the reactor
+   * prints the number and draws the curve. Black is the same equations read as a
+   * loop, which is what the instrument does under its two ceilings.
+   *
+   * Neither Damköhler nor Black has a freely-licensed photograph anywhere on
+   * Commons — checked, not assumed — so both plates show initials.
+   */
+  {
+    id: 'michaelis',
+    year: 1913,
+    people: ['Leonor Michaelis', 'Maud Menten'],
+    implemented: true,
+    tex: 'michaelis',
+    portrait: {
+      src: `${thumb}2/28/Leonor_Michaelis.jpg/500px-Leonor_Michaelis.jpg`,
+      page: `${commons}Leonor_Michaelis.jpg`,
+      by: 'Hermann Noack',
+      licence: 'Public domain',
+    },
+  },
+  { id: 'black', year: 1934, people: ['Harold Black'], implemented: true, tex: 'closedLoop' },
+  { id: 'damkohler', year: 1936, people: ['Gerhard Damköhler'], implemented: true },
+  {
+    id: 'thaler',
+    year: 1985,
+    until: 1999,
+    people: ['Richard Thaler'],
+    href: 'https://doi.org/10.1287/mksc.4.3.199',
+    portrait: {
+      src: `${thumb}2/2b/Richard_Thaler_Chatham.jpg/500px-Richard_Thaler_Chatham.jpg`,
+      page: `${commons}Richard_Thaler_Chatham.jpg`,
+      by: 'Chatham House',
+      licence: 'CC BY 2.0',
+    },
+  },
+  { id: 'turner', year: 1986, people: ['Jonathan Turner'] },
   /**
    * The contemporary academic anchor for the last question on the walkthrough:
    * who ends up with the gain. Two economists, one of them a Nobel laureate,
@@ -225,6 +279,13 @@ export function cardById(id: CardId): Card {
   if (found === undefined) throw new Error(`No research entry with id "${id}"`);
   return found;
 }
+
+/**
+ * How many entries the page calculates rather than cites. Counted rather than
+ * written down, because a hard-coded "two of them" is exactly the sentence that
+ * goes quietly wrong the next time an entry is added.
+ */
+export const COMPUTED = ENTRIES.filter((c) => c.implemented).length;
 
 /** The span the timeline ruler covers. */
 export const SPAN = {

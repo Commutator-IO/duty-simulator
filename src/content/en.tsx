@@ -1206,6 +1206,31 @@ export const EN: Copy = {
         body: 'When you switch tasks, part of your attention stays behind on the previous one — especially if you left it unfinished. Leroy showed the effect is measurable: performance on the new task is worse, and stays worse for a while.',
         so: 'The cost of an interruption is not the length of the interruption. It is the stretch of degraded work afterwards. Compare the Zeigarnik effect from 1927: unfinished things keep coming back to mind.',
       },
+      michaelis: {
+        title: 'Where speeding up stops working',
+        body: 'An enzyme makes a reaction go faster, but only so far. Pile on more and more of the stuff it works on and the rate stops climbing, because every enzyme molecule is already busy. The ceiling is set by how many there are, not by how much work you bring them. Michaelis and Menten wrote the curve down in 1913, and it is still the first thing anyone is taught about reaction rates.',
+        so: 'The arithmetic on this page assumes that checking twice as much output costs exactly twice as much. That holds only while you are nowhere near your own limit. Put this curve in its place, as the reactor does, and the gain stops rising with speed — and past a point starts coming back down.',
+      },
+      black: {
+        title: 'Feeding the output back into the input',
+        body: 'Black worked out the idea on the ferry to work in 1927. Take part of what an amplifier produces, subtract it from what goes in, and the whole device becomes stable and predictable — at the cost of most of its raw power. The striking part is what it does to the answer: what comes out stops depending much on the amplifier at all, and depends instead on the fraction you fed back.',
+        so: 'Review is a feedback path, which is why the ceiling here is not really about the tool. Make it infinitely fast, give it all of the work, and the gain lands at one divided by the share you check. A quarter checked is four times, and nothing beats it.',
+      },
+      damkohler: {
+        title: 'Which step is the slow one',
+        body: 'A chemical engineer comparing two durations: how long the reaction itself takes, against how long it takes to get the ingredients to where the reaction happens. Whichever is longer decides what the reactor produces, and the other one is nearly free. Damköhler compressed the comparison into a single dimensionless number in 1936, and what it tells you is which of the two is worth spending money on.',
+        so: 'Below 1, the part the tool never touches dominates and a faster tool changes almost nothing — widen its reach instead. Above 1, speed is still worth buying. The reactor prints the number for the settings you have chosen, which makes it the shortest answer on this page to "which fader do I move?"',
+      },
+      thaler: {
+        title: 'Money in envelopes',
+        body: 'A euro is a euro, and it makes no difference which pocket it came out of. People do not behave that way. Thaler showed we sort money into separate mental accounts with their own rules — the same ten euros saved is worth a trip across town on a small purchase and not on a large one — and that budgeting in envelopes is that instinct made deliberate.',
+        so: 'It explains why a ration behaves nothing like a wage. An unspent euro is still a euro next month, so refusing to waste it is sound. An unspent ration evaporates on the reset date, and the very same instinct now tells you to spend it while it exists.',
+      },
+      turner: {
+        title: 'The bucket that keeps filling',
+        body: 'Networks have to hold traffic to an average without punishing the occasional burst. Turner described the mechanism in 1986: a bucket filling at a steady rate, with each packet taking some out. One object, two limits — the fill rate is what you can keep up indefinitely, the depth is what you may spend at once after a quiet stretch. The token bucket is the same thing turned inside out, and admits exactly the same traffic.',
+        so: 'A weekly quota is the crude version of this: a fixed total with a date on it. The bucket has no date, which is the whole reason it never tempts you to empty it before one arrives.',
+      },
       acemoglu: {
         title: 'Power and Progress',
         body: 'A thousand years of technological change, and the finding that runs through all of it: new technology does not automatically make everybody better off. Whether the gains are shared or captured depends on who holds the bargaining power when the technology arrives — the medieval windmill enriched the abbots, and the first century of industrial machinery lowered living standards before it raised them.',
@@ -1219,9 +1244,10 @@ export const EN: Copy = {
     },
     designator: 'The research',
     title: 'Where all of this comes from',
-    sub: (count, from, to) =>
-      `${count} findings, in the order they were published — from a book about British coal in ${from} to a psychology paper in ${to}. Two of them are what the instrument actually computes. The rest are here to explain why the numbers on their own are not enough, and in two cases why they should be treated carefully.`,
-    inInstrument: 'In the instrument',
+    sub: (count, computed, from, to) =>
+      `${count} findings, in the order they were published — from a book about British coal in ${from} to a usage study published in ${to}. ${computed} of them are what this page actually computes. The rest are here to explain why the numbers on their own are not enough, and in three cases why they should be treated carefully.`,
+    computed: 'Computed here',
+    credits: 'Credits:',
     here: 'Here',
     to: 'to',
     caveat: (

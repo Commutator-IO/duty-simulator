@@ -45,14 +45,19 @@ both from the custom domain and from a project site under `/<repo>/`.
 
 ## Structure
 
-Four tabs, held in `App.tsx`:
+Five tabs, held in `App.tsx`:
 
 1. **Start here** (`walkthrough`) — the guided read. Explains one idea, hands over the one
    fader it controls, shows what moved, then goes on. Sets every value for the whole page.
-2. **The instrument** (`simulator`) — the fader console, readouts, oscilloscope, load meters.
-3. **What to change** (`macos`) — the day as a battery, the week as a ration, Screen Time and
+2. **The instrument** (`simulator`) — the fader console, readouts, oscilloscope, load meters,
+   and the same equations read as a feedback loop.
+3. **The reactor** (`reactor`) — the model read as a reaction. Chemical kinetics only; the
+   control-engineering reading of it belongs on the instrument.
+4. **What to change** (`macos`) — the day as a battery, the week as a ration, Screen Time and
    Focus, plus the regime table.
-4. **The research** (`foundations`) — fourteen cards on a timeline, 1865 → 2025.
+5. **The research** (`foundations`) — nineteen cards on a timeline, 1865 → 2026. The five the
+   page calculates rather than cites carry a badge; the count is derived from `implemented`,
+   never written into a sentence.
 
 The walkthrough and the research cards must stay consistent: the walkthrough argues from
 those findings and cites them by `id`, so changing a claim in one place means checking the
@@ -148,8 +153,10 @@ Two rules, and neither bends:
 - **Credit is printed**, because CC BY and CC BY-SA both require it. `by` and `licence` on
   the entry feed the line under the timeline.
 
-Six people have no freely-licensed picture — Roy, Little, Leroy, Karasek, Siegrist, Dodson
-— and their plate shows initials. Do not invent a likeness to fill the gap.
+Nine people have no freely-licensed picture — Roy, Little, Leroy, Karasek, Siegrist, Dodson,
+Black, Damköhler, Turner — and their plate shows initials. Do not invent a likeness to fill the
+gap. The credit line names `portrait.of ?? people[0]`, because an entry with several names must
+not end up crediting the wrong face; `foundations.test.ts` enforces the licence allowlist.
 
 ## Design
 

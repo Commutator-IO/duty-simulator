@@ -267,8 +267,11 @@ export type Copy = {
     cards: Record<CardId, { title: string; body: string; so: string }>;
     designator: string;
     title: string;
-    sub: (count: number, from: number, to: number) => string;
-    inInstrument: string;
+    sub: (count: number, computed: number, from: number, to: number) => string;
+    /** Badge on the entries the page does not merely cite but calculates. */
+    computed: string;
+    /** Opens the portrait credit line. */
+    credits: string;
     here: string;
     to: string;
     caveat: ReactNode;

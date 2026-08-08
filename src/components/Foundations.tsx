@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { SectionHead } from './Cards';
 import { Latex } from './Latex';
-import { CARDS, CREDITS, SPAN, type Card } from '../lib/foundations';
+import { CARDS, COMPUTED, CREDITS, SPAN, type Card } from '../lib/foundations';
 import { useCopy } from '../content';
 
 /**
@@ -137,7 +137,7 @@ export function Foundations() {
   return (
     <>
       <section className="mt-11">
-        <SectionHead designator={r.designator} title={r.title} sub={r.sub(CARDS.length, SPAN.from, SPAN.to)} />
+        <SectionHead designator={r.designator} title={r.title} sub={r.sub(CARDS.length, COMPUTED, SPAN.from, SPAN.to)} />
       </section>
 
       <Ruler active={active} />
@@ -162,7 +162,7 @@ export function Foundations() {
                 <p className="caption mt-1.5">{card.people.join(' · ')}</p>
                 {card.implemented && (
                   <p className="font-sans text-brass mt-2 text-[10px] font-semibold tracking-[0.1em] uppercase">
-                    {r.inInstrument}
+                    {r.computed}
                   </p>
                 )}
               </div>
@@ -190,7 +190,7 @@ export function Foundations() {
       <p className="caption border-rule mt-14 max-w-[68ch] border-t pt-5">{r.caveat}</p>
 
       <p className="caption mt-4 max-w-[68ch]">
-        {r.portraits} Credits:{' '}
+        {r.portraits} {r.credits}{' '}
         {CREDITS.map(({ card, portrait }, i) => (
           <span key={card.id}>
             {i > 0 && '; '}
@@ -200,7 +200,7 @@ export function Foundations() {
               rel="noreferrer"
               className="hover:text-ink underline underline-offset-2"
             >
-              {card.people[card.people.length - 1]}
+              {portrait.of ?? card.people[0]}
             </a>{' '}
             © {portrait.by}, {portrait.licence}
           </span>
