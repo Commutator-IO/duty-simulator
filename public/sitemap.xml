@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The page is one document in two languages, not five pages.
+
+  Every tab renders from the same HTML at the same address, so listing them
+  would offer a crawler five copies of one document and ask it to choose. What
+  is worth declaring is the pair of languages, which is what the hreflang
+  annotations below do. `/` carries no lang parameter because it follows the
+  reader's own browser, which is exactly what x-default means.
+
+  No <lastmod>: a date nobody remembers to touch is worse than no date at all,
+  and search engines discount the field when it stops being trustworthy.
+-->
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+>
+  <url>
+    <loc>https://duty.commutator.io/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duty.commutator.io/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://duty.commutator.io/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://duty.commutator.io/?lang=fr" />
+  </url>
+  <url>
+    <loc>https://duty.commutator.io/?lang=fr</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://duty.commutator.io/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://duty.commutator.io/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://duty.commutator.io/?lang=fr" />
+  </url>
+</urlset>
