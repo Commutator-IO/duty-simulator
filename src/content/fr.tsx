@@ -303,6 +303,7 @@ export const FR: Copy = {
       foundations: 'Les sources',
     },
     reportError: 'Signaler une erreur',
+    home: 'Retour vers commutator.io',
     sourceCode: 'Code source',
     privacy:
       "Cette page ne conserve rien : ni cookie, ni mesure d'audience, ni compte. Ce que vous réglez vit dans la barre d'adresse, qui sert aussi à le partager.",

@@ -62,6 +62,8 @@ export type Copy = {
     dek: string;
     standfirst: string;
     tabs: Record<Tab, string>;
+    /** The way back to the site this one hangs off. */
+    home: string;
     reportError: string;
     sourceCode: string;
     privacy: string;

@@ -279,6 +279,7 @@ export const EN: Copy = {
       foundations: 'The research',
     },
     reportError: 'Report an error',
+    home: 'Back to commutator.io',
     sourceCode: 'Source code',
     privacy:
       'This page stores nothing: no cookie, no analytics, no account. The settings live in the address bar, which is also how you share one.',

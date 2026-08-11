@@ -8,6 +8,9 @@
 
 export const REPO = 'https://github.com/Commutator-IO/duty-simulator';
 
+/** The site this one hangs off. */
+export const HOME = 'https://www.commutator.io';
+
 export const ISSUES = `${REPO}/issues`;
 
 /**

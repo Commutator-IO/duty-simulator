@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useCopy } from '../content';
 import { LABELS as LANGUAGE_LABELS, LANGUAGES, type Language } from '../lib/i18n';
-import { REPO, newIssueLink } from '../lib/repo';
+import { HOME, REPO, newIssueLink } from '../lib/repo';
 import { TABS, type Tab } from '../lib/url';
 
 /**
@@ -189,6 +189,10 @@ export function Footer({ shareLink }: { shareLink: string }) {
   return (
     <footer className="border-rule text-muted mt-16 border-t pt-6">
       <p className="caption flex flex-wrap gap-x-5 gap-y-1">
+        {/* The way back out. Same tab, because leaving is what it is for. */}
+        <a href={HOME} className="hover:text-ink underline underline-offset-2 transition">
+          {copy.chrome.home}
+        </a>
         <a
           href={newIssueLink(shareLink)}
           target="_blank"
