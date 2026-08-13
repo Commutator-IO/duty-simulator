@@ -4,6 +4,7 @@ import { LANGUAGES } from './i18n';
 // to a project that otherwise never touches a Node API.
 import sitemap from '../../public/sitemap.xml?raw';
 import robots from '../../public/robots.txt?raw';
+import stylesheet from '../../public/sitemap.xsl?raw';
 
 /**
  * The sitemap is hand-written, which means it can quietly fall behind the app.
@@ -44,5 +45,28 @@ describe('the sitemap', () => {
 
   it('is reachable, because a sitemap nothing points at is not discovered', () => {
     expect(robots).toContain(`Sitemap: ${SITE}/sitemap.xml`);
+  });
+
+  /**
+   * WebKit builds no document body for an unstyled XML file, so Safari shows a
+   * blank page and the file reads as broken to anyone checking it by hand.
+   * Losing the stylesheet would bring that back silently.
+   */
+  it('carries the stylesheet that makes it visible in Safari', () => {
+    expect(sitemap).toContain('<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>');
+    expect(stylesheet).toContain('xmlns:xsl="http://www.w3.org/1999/XSL/Transform"');
+  });
+
+  it('gives the stylesheet every namespace it has to reach into', () => {
+    for (const ns of [
+      'http://www.sitemaps.org/schemas/sitemap/0.9',
+      'http://www.w3.org/1999/xhtml',
+    ]) {
+      expect(stylesheet).toContain(ns);
+    }
+  });
+
+  it('keeps the rendered view out of the index — it is furniture, not a page', () => {
+    expect(stylesheet).toContain('name="robots" content="noindex"');
   });
 });

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <!--
   The page is one document in two languages, not five pages.
+
+  The stylesheet above is for people, not crawlers, which ignore the
+  instruction. Without it WebKit builds no document body for an XML file and
+  Safari shows a blank page — the file is fine, but nobody can tell.
 
   Every tab renders from the same HTML at the same address, so listing them
   would offer a crawler five copies of one document and ask it to choose. What
